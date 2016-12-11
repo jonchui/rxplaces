@@ -1,0 +1,48 @@
+PODS:
+  - Alamofire (4.2.0)
+  - ModelMapper (5.0.0)
+  - Moya (8.0.0-beta.4):
+    - Moya/Core (= 8.0.0-beta.4)
+  - Moya-ModelMapper/Core (4.0.0-beta.3):
+    - ModelMapper (= 5.0.0)
+    - Moya (= 8.0.0-beta.4)
+  - Moya-ModelMapper/RxSwift (4.0.0-beta.3):
+    - Moya-ModelMapper/Core
+    - Moya/RxSwift (= 8.0.0-beta.4)
+    - RxSwift (~> 3.0.0)
+  - Moya/Core (8.0.0-beta.4):
+    - Alamofire (~> 4.0)
+    - Result (~> 3.0)
+  - Moya/RxSwift (8.0.0-beta.4):
+    - Moya/Core
+    - RxSwift (~> 3.0)
+  - ReachabilitySwift (3)
+  - Result (3.0.0)
+  - RxCocoa (3.0.1):
+    - RxSwift (~> 3.0)
+  - RxSwift (3.0.1)
+  - SDWebImage (3.8.2):
+    - SDWebImage/Core (= 3.8.2)
+  - SDWebImage/Core (3.8.2)
+
+DEPENDENCIES:
+  - Moya-ModelMapper/RxSwift (= 4.0.0-beta.3)
+  - Moya/RxSwift (= 8.0.0-beta.4)
+  - ReachabilitySwift (~> 3)
+  - RxCocoa
+  - SDWebImage
+
+SPEC CHECKSUMS:
+  Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
+  ModelMapper: 89ced1f51ec6360e93f6889d08c818d4cad526a3
+  Moya: bad6f72ec40661f09a8cd85ab470226d2795a485
+  Moya-ModelMapper: d7c1946ee93bf3b556bcdb9f203dc0fc5afd497b
+  ReachabilitySwift: f5b9bb30a0777fac8f09ce8b067e32faeb29bb64
+  Result: 1b3e431f37cbcd3ad89c6aa9ab0ae55515fae3b6
+  RxCocoa: 15a52fc590dcc700cb4a690a633b5c5184ce3a78
+  RxSwift: af5680055c4ad04480189c52d28385b1029493a6
+  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
+
+PODFILE CHECKSUM: 62b351eefc601ac5c036d9c235452aa9e6b9aa9f
+
+COCOAPODS: 1.1.1
