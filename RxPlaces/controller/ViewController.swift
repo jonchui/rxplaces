@@ -36,7 +36,7 @@ class ViewController: UIViewController, UITableViewDelegate {
 
         setupReachability()
         setupTableView()
-        didSearch(type: "car_repair")
+        didSearch(type: .carRepair)
 //        setupSearchBar()
     }
     
@@ -120,7 +120,7 @@ class ViewController: UIViewController, UITableViewDelegate {
 
     }
     
-    private func didSearch(type: String!) {
+    private func didSearch(type: Type) {
         self.loadPlaces("34.052235,-118.243683", type: type, radius: 500)
             .trackActivity(activityIndicator)
             .subscribe { [unowned self] event in
@@ -168,7 +168,7 @@ class ViewController: UIViewController, UITableViewDelegate {
         
     }
     
-    func loadPlaces(_ location: String, type: String, radius: Int) -> Observable<Result> {
+    func loadPlaces(_ location: String, type: Type, radius: Int) -> Observable<Result> {
         return self.provider!
             .request(.getPlaces(location: location, type: type, radius: radius, key: GooglePlacesAPI.token))
             .mapObject(type: Result.self)

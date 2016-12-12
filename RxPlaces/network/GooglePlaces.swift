@@ -14,7 +14,7 @@ struct GooglePlacesAPI {
 
 // MARK: - TargetType Protocol Implementation
 enum GooglePlaces : TargetType {
-    case getPlaces(location: String, type: String, radius: Int, key: String)
+    case getPlaces(location: String, type: Type, radius: Int, key: String)
     case getPhoto(photo: Photo, key: String)
     case getNextPage(nextPageToken: String, key: String)
 
