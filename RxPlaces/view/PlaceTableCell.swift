@@ -14,9 +14,6 @@ class PlaceTableCell: UITableViewCell {
     @IBOutlet weak var iconImageView: UIImageView!
     @IBOutlet weak var ratingLabel: UILabel!
     
-    //vars
-    var place:Place?
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

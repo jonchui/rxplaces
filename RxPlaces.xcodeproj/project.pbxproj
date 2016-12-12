@@ -15,8 +15,8 @@
 		C933642C1DECB1EF00B03091 /* ImageCacheSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C933642B1DECB1EF00B03091 /* ImageCacheSingleton.swift */; };
 		C933642E1DECD4A200B03091 /* DefaultReachabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C933642D1DECD4A200B03091 /* DefaultReachabilityService.swift */; };
 		C93364301DECDBE300B03091 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C933642F1DECDBE300B03091 /* ActivityIndicator.swift */; };
+		C944624F1DFEDC7500EEB0EF /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = C944624E1DFEDC7500EEB0EF /* Type.swift */; };
 		C97D1F7A1DEB9E760025D5E3 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97D1F791DEB9E760025D5E3 /* Result.swift */; };
-		C97D1F7D1DEBB2390025D5E3 /* PlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97D1F7C1DEBB2390025D5E3 /* PlaceViewModel.swift */; };
 		C9973AF51DEB891E0063D58D /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9973AF41DEB891E0063D58D /* DetailsViewController.swift */; };
 		C9A0DAF21DE9C2FC0048371A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0DAF11DE9C2FC0048371A /* AppDelegate.swift */; };
 		C9A0DAF71DE9C2FC0048371A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9A0DAF51DE9C2FC0048371A /* Main.storyboard */; };
@@ -64,8 +64,8 @@
 		C933642B1DECB1EF00B03091 /* ImageCacheSingleton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCacheSingleton.swift; sourceTree = "<group>"; };
 		C933642D1DECD4A200B03091 /* DefaultReachabilityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultReachabilityService.swift; sourceTree = "<group>"; };
 		C933642F1DECDBE300B03091 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		C944624E1DFEDC7500EEB0EF /* Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
 		C97D1F791DEB9E760025D5E3 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
-		C97D1F7C1DEBB2390025D5E3 /* PlaceViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceViewModel.swift; sourceTree = "<group>"; };
 		C9973AF41DEB891E0063D58D /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		C9A0DAEE1DE9C2FC0048371A /* RxPlaces.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RxPlaces.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9A0DAF11DE9C2FC0048371A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -145,14 +145,6 @@
 			path = helper;
 			sourceTree = "<group>";
 		};
-		C97D1F7B1DEBB1F20025D5E3 /* viewmodel */ = {
-			isa = PBXGroup;
-			children = (
-				C97D1F7C1DEBB2390025D5E3 /* PlaceViewModel.swift */,
-			);
-			path = viewmodel;
-			sourceTree = "<group>";
-		};
 		C9A0DAE51DE9C2FC0048371A = {
 			isa = PBXGroup;
 			children = (
@@ -180,7 +172,6 @@
 			children = (
 				C9C5AD281DEDA9C9008A8CC2 /* extension */,
 				C933642A1DECB1D700B03091 /* helper */,
-				C97D1F7B1DEBB1F20025D5E3 /* viewmodel */,
 				C9A0DB2A1DEA0CAF0048371A /* view */,
 				C9A0DB251DE9C8CB0048371A /* model */,
 				C9A0DB201DE9C8700048371A /* controller */,
@@ -237,6 +228,7 @@
 				C9A0DB261DE9C8F40048371A /* Place.swift */,
 				C9A0DB271DE9C8F40048371A /* Photo.swift */,
 				C97D1F791DEB9E760025D5E3 /* Result.swift */,
+				C944624E1DFEDC7500EEB0EF /* Type.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -561,11 +553,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9A0DB221DE9C8900048371A /* ViewController.swift in Sources */,
-				C97D1F7D1DEBB2390025D5E3 /* PlaceViewModel.swift in Sources */,
 				C9A0DB241DE9C8B70048371A /* GooglePlaces.swift in Sources */,
 				C9C5AD381DEDD825008A8CC2 /* UIViewController+Alert.swift in Sources */,
 				C9A0DB281DE9C8F40048371A /* Place.swift in Sources */,
 				C9C5AD2E1DEDAC93008A8CC2 /* Reactive+ProgressBarView.swift in Sources */,
+				C944624F1DFEDC7500EEB0EF /* Type.swift in Sources */,
 				C93364301DECDBE300B03091 /* ActivityIndicator.swift in Sources */,
 				C97D1F7A1DEB9E760025D5E3 /* Result.swift in Sources */,
 				C9A0DAF21DE9C2FC0048371A /* AppDelegate.swift in Sources */,
