@@ -109,18 +109,6 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
         
         // observable table view 👍
         self.rxPlaces
-            .subscribeOn(MainScheduler.instance)
-            .do(onNext: { (places) in
-                print(places)
-            }, onError: { (error) in
-                print(error)
-            }, onCompleted: { 
-                print("completed")
-            }, onSubscribe: { 
-                print("subs")
-            }, onDispose: { 
-                print("dispose")
-            })
             .bindTo(self.placeTableView.rx.items(cellIdentifier: CustomCellIdentifier.placeIdentifier, cellType: PlaceTableCell.self)){ (row, element, cell) in
                 cell.nameLabel?.text = element.name
                 cell.iconImageView.sd_setImage(with: URL(string: element.iconURL!), placeholderImage: UIImage(named: "PlaceholderH"))
@@ -240,44 +228,6 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
         self.places.append(newPlace)
         
         self.rxPlaces = Observable.just(self.places)
-    }
-    
-    //MARK: infinite scroll
-    func setupInfiniteScroll() {
-        // infinite scroll
-        placeTableView.rx.didEndDisplayingCell
-            .subscribe { 🤔 in
-                if self.progressBarView.isHidden && !self.places.isEmpty {
-                    if let token = self.pagetoken {
-                        self.nextPage(token)
-                            .trackActivity(self.activityIndicator)
-                            .subscribe { event in
-                                switch event {
-                                case let .next(response):
-                                    if let places = response.places {
-                                        self.places.append(contentsOf: places)
-                                    }
-                                    self.pagetoken = response.nextPageToken
-                                case .error:
-                                    print(🤔.element!.indexPath.row)
-                                    if (🤔.element!.indexPath.row == self.places.count) {
-                                        let alertController = self.alertController(title: "End of results", message: "There is no more results to show", preferredStyle: .actionSheet, actions: [UIAlertAction.init(title: "OK", style: UIAlertActionStyle.default, handler: nil)])
-                                        if !(self.navigationController!.visibleViewController!.isKind(of: UIAlertController.self)) {
-                                            DispatchQueue.main.async {
-                                                self.present(alertController, animated: true, completion: nil)
-                                            }
-                                        }
-                                    }
-                                case .completed():
-                                    print("completed")
-                                    self.progressBarView.isHidden = true
-                                }
-                            }
-                            .addDisposableTo(self.disposeBag)
-                    }
-                }
-            }
-            .addDisposableTo(self.disposeBag)
     }
     
     override func didReceiveMemoryWarning() {
