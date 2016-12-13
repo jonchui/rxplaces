@@ -5,6 +5,7 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -28,37 +29,71 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9Dm-bj-PeE">
-                                <rect key="frame" x="0.0" y="49" width="375" height="554"/>
+                                <rect key="frame" x="0.0" y="49" width="375" height="404"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="mDX-0w-A5J">
+                            <searchBar hidden="YES" contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="mDX-0w-A5J">
                                 <rect key="frame" x="0.0" y="5" width="375" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="4Zr-9V-8Sr"/>
                                 </constraints>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uuq-it-3iv" customClass="TypePickerView" customModule="RxPlaces" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="453" width="375" height="150"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="EwI-Qx-Ke1"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="Uuq-it-3iv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="64p-vx-tC2"/>
                             <constraint firstItem="1r4-Hg-gw8" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="JZS-Us-8so"/>
+                            <constraint firstAttribute="trailing" secondItem="Uuq-it-3iv" secondAttribute="trailing" id="QKi-oT-sNm"/>
                             <constraint firstItem="mDX-0w-A5J" firstAttribute="top" secondItem="1r4-Hg-gw8" secondAttribute="bottom" id="UCV-pe-H8q"/>
                             <constraint firstItem="mDX-0w-A5J" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="a3m-eq-819"/>
                             <constraint firstAttribute="trailing" secondItem="1r4-Hg-gw8" secondAttribute="trailing" id="hjk-Yc-XXG"/>
                             <constraint firstAttribute="trailing" secondItem="9Dm-bj-PeE" secondAttribute="trailing" id="hqk-V3-RKc"/>
                             <constraint firstItem="9Dm-bj-PeE" firstAttribute="top" secondItem="mDX-0w-A5J" secondAttribute="bottom" id="jWB-LO-Yed"/>
                             <constraint firstAttribute="trailing" secondItem="mDX-0w-A5J" secondAttribute="trailing" id="n4z-lh-nhH"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="9Dm-bj-PeE" secondAttribute="bottom" id="nHh-zr-bAF"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Uuq-it-3iv" secondAttribute="bottom" id="qPW-qI-Ph5"/>
                             <constraint firstItem="9Dm-bj-PeE" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="s6c-ZB-dOa"/>
+                            <constraint firstItem="Uuq-it-3iv" firstAttribute="top" secondItem="9Dm-bj-PeE" secondAttribute="bottom" id="xBE-WP-kaM"/>
                             <constraint firstItem="1r4-Hg-gw8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="xWx-gr-1nT"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <navigationItem key="navigationItem" title="RxPlaces" id="F4s-o2-QDE"/>
+                    <navigationItem key="navigationItem" title="RxPlaces" id="F4s-o2-QDE">
+                        <leftBarButtonItems>
+                            <barButtonItem title="Type" id="0Tk-FM-JTW">
+                                <connections>
+                                    <action selector="chooseType:" destination="BYZ-38-t0r" id="BvT-FL-Kim"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Add" id="0Vw-6T-k71">
+                                <connections>
+                                    <action selector="addPlace:" destination="BYZ-38-t0r" id="YvG-Ah-Siy"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
+                        <rightBarButtonItems>
+                            <barButtonItem title="Search" id="Xsb-dW-tA1">
+                                <connections>
+                                    <action selector="showHideSearchBar:" destination="BYZ-38-t0r" id="pnb-Ye-dCw"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Sort" id="s9w-Nw-DeB"/>
+                        </rightBarButtonItems>
+                    </navigationItem>
                     <connections>
+                        <outlet property="pickerViewHeightConstraint" destination="EwI-Qx-Ke1" id="qZL-Lr-tcG"/>
                         <outlet property="placeTableView" destination="9Dm-bj-PeE" id="PHM-g6-riA"/>
                         <outlet property="progressBarView" destination="1r4-Hg-gw8" id="gKH-ma-fTM"/>
                         <outlet property="searchBar" destination="mDX-0w-A5J" id="vus-dM-Wic"/>
+                        <outlet property="searchBarHeightConstraint" destination="4Zr-9V-8Sr" id="lxC-uA-V35"/>
+                        <outlet property="typePickerView" destination="Uuq-it-3iv" id="xyV-1m-9bS"/>
                         <segue destination="abN-cN-wSa" kind="show" identifier="showDetails" id="Urr-S8-uZk"/>
                     </connections>
                 </viewController>

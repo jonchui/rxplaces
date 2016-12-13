@@ -16,42 +16,71 @@ struct CustomCellIdentifier {
     static let placeIdentifier = "PlaceTableCell"
 }
 
-class ViewController: UIViewController, UITableViewDelegate {
+class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     //outlets
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var placeTableView: UITableView!
     @IBOutlet weak var progressBarView: ProgressBarView!
+    @IBOutlet weak var typePickerView: TypePickerView!
+    
+    //constraints
+    @IBOutlet weak var searchBarHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var pickerViewHeightConstraint: NSLayoutConstraint!
     
     //vars
     private var places:[Place]! = []
-    
+    private var rxPlaces:Observable<[Place]>!
     private let activityIndicator = ActivityIndicator()
     private var pagetoken:String?
     private var provider:RxMoyaProvider<GooglePlaces>! = RxMoyaProvider<GooglePlaces>()
     private var disposeBag:DisposeBag! = DisposeBag()
     private var selectedPlace:Place!
+    private var pickerDatasource:[String]! = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupReachability()
+        setupSearchBar()
         setupTableView()
-        didSearch(type: .carRepair)
-//        setupSearchBar()
+        setupPickerView()
+        setupConstraints()
+//        didSearch(type: .airport)
     }
     
-//    func setupSearchBar() {
-//        searchBar
-//            .rx.text
-//            .throttle(0.5, scheduler: MainScheduler.instance) // Wait 0.5 for changes.
-////            .distinctUntilChanged() // If they didn't occur, check if the new value is the same as old.
-////            .filter { $0.characters.count > 0 }
-//            .subscribe { [unowned self] (query) in
-//                self.didSearch(type: query.element!)
-//                self.places = []
-//            }
-//            .addDisposableTo(self.disposeBag)
-//    }
+    func setupConstraints() {
+    }
+    
+    func setupSearchBar() {
+    }
+
+    func setupPickerView() {
+        self.typePickerView.pickerView.translatesAutoresizingMaskIntoConstraints = false
+        self.typePickerView.pickerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        self.typePickerView.pickerView.dataSource = self
+        self.typePickerView.pickerView.delegate = self
+        
+        Type.iterateEnum(Type.self).forEach { (element) in
+            pickerDatasource.append(element.description)
+        }
+        
+        typePickerView.pickerView
+            .rx
+            .itemSelected
+            .throttle(0.5, scheduler: MainScheduler.instance)
+            .subscribe { (event) in
+                switch event {
+                case let .next(response):
+                    self.didSearch(type: Type(rawValue: response.0)!)
+                case let .error(error):
+                    print(error)
+                case let .completed(completed):
+                    print(completed)
+                }
+            }
+            .addDisposableTo(self.disposeBag)
+    }
     
     func setupTableView() {
         //setup custom cells
@@ -60,11 +89,38 @@ class ViewController: UIViewController, UITableViewDelegate {
         
         // setup tableview delegate
         placeTableView
-            .rx.setDelegate(self)
+            .rx
+            .setDelegate(self)
             .addDisposableTo(self.disposeBag)
         
+        
+        // item selected
+        placeTableView.rx.itemSelected.subscribe { (indexPath) in
+            self.selectedPlace = self.places?[indexPath.element!.row]
+            self.performSegue(withIdentifier: "showDetails", sender: nil)
+            }
+            .addDisposableTo(self.disposeBag)
+        
+        self.setTableObservable()
+    }
+    
+    public func setTableObservable() {
+        self.rxPlaces = Observable.just([], scheduler: MainScheduler.instance)
+        
         // observable table view 👍
-        Observable.just(self.places)
+        self.rxPlaces
+            .subscribeOn(MainScheduler.instance)
+            .do(onNext: { (places) in
+                print(places)
+            }, onError: { (error) in
+                print(error)
+            }, onCompleted: { 
+                print("completed")
+            }, onSubscribe: { 
+                print("subs")
+            }, onDispose: { 
+                print("dispose")
+            })
             .bindTo(self.placeTableView.rx.items(cellIdentifier: CustomCellIdentifier.placeIdentifier, cellType: PlaceTableCell.self)){ (row, element, cell) in
                 cell.nameLabel?.text = element.name
                 cell.iconImageView.sd_setImage(with: URL(string: element.iconURL!), placeholderImage: UIImage(named: "PlaceholderH"))
@@ -74,66 +130,27 @@ class ViewController: UIViewController, UITableViewDelegate {
                 }
             }
             .addDisposableTo(self.disposeBag)
-        
-        // item selected
-//        placeTableView.rx.itemSelected.subscribe { [unowned self] (indexPath) in
-//            let justPlaces = Observable.just(self.places)
-//            self.selectedPlace = justPlaces[indexPath.row]
-//            self.performSegue(withIdentifier: "showDetails", sender: self.placeTableView.indexPathForSelectedRow)
-//            }
-//            .addDisposableTo(self.disposeBag)
-        
-        // infinite scroll
-//        placeTableView.rx.didEndDisplayingCell
-//            .subscribe { [unowned self] 🤔 in
-//                if self.progressBarView.isHidden && !self.places.value.isEmpty {
-//                    if let token = self.pagetoken {
-//                        self.nextPage(token)
-//                            .trackActivity(self.activityIndicator)
-//                            .subscribe { [unowned self] event in
-//                                switch event {
-//                                case let .next(response):
-//                                    if let places = response.places {
-//                                        self.places.value.append(contentsOf: places)
-//                                    }
-//                                    self.pagetoken = response.nextPageToken
-//                                case .error:
-//                                    print(🤔.element!.indexPath.row)
-//                                    if (🤔.element!.indexPath.row == self.places.value.count) {
-//                                        let alertController = self.alertController(title: "End of results", message: "There is no more results to show", preferredStyle: .actionSheet, actions: [UIAlertAction.init(title: "OK", style: UIAlertActionStyle.default, handler: nil)])
-//                                        if !(self.navigationController!.visibleViewController!.isKind(of: UIAlertController.self)) {
-//                                            DispatchQueue.main.async {
-//                                                self.present(alertController, animated: true, completion: nil)
-//                                            }
-//                                        }
-//                                    }
-//                                case .completed():
-//                                    print("completed")
-//                                    self.progressBarView.isHidden = true
-//                                }
-//                            }
-//                            .addDisposableTo(self.disposeBag)
-//                    }
-//                }
-//            }
-//            .addDisposableTo(self.disposeBag)
 
     }
     
     private func didSearch(type: Type) {
-        self.loadPlaces("34.052235,-118.243683", type: type, radius: 500)
+        self.loadPlaces("34.052235,-118.243683", type: type, radius: 5000)
+            .subscribeOn(MainScheduler.instance)
             .trackActivity(activityIndicator)
-            .subscribe { [unowned self] event in
+            .subscribe { event in
                 switch event {
                 case let .next(response):
-                    if let places = response.places {
-                        self.places = places
-                    }
-                    self.pagetoken = response.nextPageToken
+                    
+                    self.places = response
+//                    print(self.places)
+                    
+                    self.rxPlaces = Observable.just(self.places)
+                    
+//                    self.pagetoken = response.nextPageToken
+//                    print("page token: \(self.pagetoken)")
                 case let .error(error):
                     print(error)
                 case .completed():
-                    print("completed")
                     self.progressBarView.isHidden = true
                 }
             }
@@ -143,7 +160,7 @@ class ViewController: UIViewController, UITableViewDelegate {
     func setupReachability() {
         let reachable = try! DefaultReachabilityService.init()
         
-        reachable.reachability.subscribe { [unowned self] event in
+        reachable.reachability.subscribe { event in
             switch (event) {
             case let .next(status):
                 print("network is \(status)")
@@ -168,25 +185,99 @@ class ViewController: UIViewController, UITableViewDelegate {
         
     }
     
-    func loadPlaces(_ location: String, type: Type, radius: Int) -> Observable<Result> {
+    func loadPlaces(_ location: String, type: Type, radius: Int) -> Observable<[Place]> {
         return self.provider!
             .request(.getPlaces(location: location, type: type, radius: radius, key: GooglePlacesAPI.token))
-            .mapObject(type: Result.self)
+            .observeOn(MainScheduler.instance)
+            .subscribeOn(MainScheduler.instance)
+            .mapArray(type: Place.self, keyPath: "results")
     }
     
     func nextPage(_ pagetoken: String) -> Observable<Result> {
         return self.provider!
             .request(.getNextPage(nextPageToken: pagetoken, key: GooglePlacesAPI.token))
             .mapObject(type: Result.self)
+            .observeOn(MainScheduler.instance)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "showDetails") {
             if let detailsViewController = segue.destination as? DetailsViewController {
-//                let cell = placeTableView.cellForRow(at: sender as! IndexPath) as! PlaceTableCell
                 detailsViewController.place = self.selectedPlace
             }
         }
+    }
+    
+    @IBAction func showHideSearchBar(_ sender: Any) {
+        self.searchBar.isHidden = !self.searchBar.isHidden
+        self.searchBarHeightConstraint.constant = self.searchBar.isHidden ? 0 : 44
+    }
+    
+    @IBAction func chooseType(_ sender: Any) {
+        self.typePickerView.isHidden = !self.typePickerView.isHidden
+        self.pickerViewHeightConstraint.constant = self.typePickerView.isHidden ? 0 : 150
+    }
+    
+    //Mark - UIPickerViewDelegate:
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerDatasource[row]
+    }
+    
+    //Mark - UIPickerViewDatasource:
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerDatasource.count
+    }
+    
+    @IBAction func addPlace(_ sender: Any) {
+        var newPlace = Place()
+        newPlace.id = "12312312321"
+        newPlace.name = "hidden place"
+        newPlace.vicinity = "hidden street"
+        self.places.append(newPlace)
+        
+        self.rxPlaces = Observable.just(self.places)
+    }
+    
+    //MARK: infinite scroll
+    func setupInfiniteScroll() {
+        // infinite scroll
+        placeTableView.rx.didEndDisplayingCell
+            .subscribe { 🤔 in
+                if self.progressBarView.isHidden && !self.places.isEmpty {
+                    if let token = self.pagetoken {
+                        self.nextPage(token)
+                            .trackActivity(self.activityIndicator)
+                            .subscribe { event in
+                                switch event {
+                                case let .next(response):
+                                    if let places = response.places {
+                                        self.places.append(contentsOf: places)
+                                    }
+                                    self.pagetoken = response.nextPageToken
+                                case .error:
+                                    print(🤔.element!.indexPath.row)
+                                    if (🤔.element!.indexPath.row == self.places.count) {
+                                        let alertController = self.alertController(title: "End of results", message: "There is no more results to show", preferredStyle: .actionSheet, actions: [UIAlertAction.init(title: "OK", style: UIAlertActionStyle.default, handler: nil)])
+                                        if !(self.navigationController!.visibleViewController!.isKind(of: UIAlertController.self)) {
+                                            DispatchQueue.main.async {
+                                                self.present(alertController, animated: true, completion: nil)
+                                            }
+                                        }
+                                    }
+                                case .completed():
+                                    print("completed")
+                                    self.progressBarView.isHidden = true
+                                }
+                            }
+                            .addDisposableTo(self.disposeBag)
+                    }
+                }
+            }
+            .addDisposableTo(self.disposeBag)
     }
     
     override func didReceiveMemoryWarning() {

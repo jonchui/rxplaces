@@ -25,4 +25,7 @@ struct Place : Mappable {
         photos = map.optionalFrom("photos")
     }
     
+    init() {
+        
+    }
 }

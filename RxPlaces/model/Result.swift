@@ -9,12 +9,12 @@ import Foundation
 import Mapper
 
 struct Result : Mappable {
-    var nextPageToken: String!
+    var nextPageToken: String?
     var places: [Place]?
     var status: String!
     
     init(map: Mapper) throws {
-        try nextPageToken = map.from("next_page_token")
+        nextPageToken = map.optionalFrom("next_page_token")
         places = map.optionalFrom("results")
         try status = map.from("status")
     }

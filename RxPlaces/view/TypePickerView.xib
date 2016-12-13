@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TypePickerView" customModule="RxPlaces" customModuleProvider="target">
+            <connections>
+                <outlet property="pickerView" destination="KoR-4t-Bv2" id="3YL-Uz-KzJ"/>
+                <outlet property="view" destination="iN0-l3-epB" id="AQd-fv-Ees"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="398" height="201"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KoR-4t-Bv2">
+                    <rect key="frame" x="0.0" y="0.0" width="398" height="201"/>
+                </pickerView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="KoR-4t-Bv2" secondAttribute="bottom" id="AyR-RV-otP"/>
+                <constraint firstItem="KoR-4t-Bv2" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Spw-aO-c4x"/>
+                <constraint firstItem="KoR-4t-Bv2" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="V3w-Dn-PPZ"/>
+                <constraint firstAttribute="trailing" secondItem="KoR-4t-Bv2" secondAttribute="trailing" id="pK6-sk-5VF"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="45" y="287.5"/>
+        </view>
+    </objects>
+</document>
