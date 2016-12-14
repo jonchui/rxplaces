@@ -29,7 +29,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     
     //vars
     private var places:[Place]! = []
-    private var rxPlaces:Observable<[Place]>!
+    private var rxPlaces:Variable<[Place]>! = Variable([])
     private let activityIndicator = ActivityIndicator()
     private var pagetoken:String?
     private var provider:RxMoyaProvider<GooglePlaces>! = RxMoyaProvider<GooglePlaces>()
@@ -45,7 +45,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
         setupTableView()
         setupPickerView()
         setupConstraints()
-//        didSearch(type: .airport)
+        setupRx()
     }
     
     func setupConstraints() {
@@ -68,7 +68,6 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
         typePickerView.pickerView
             .rx
             .itemSelected
-            .throttle(0.5, scheduler: MainScheduler.instance)
             .subscribe { (event) in
                 switch event {
                 case let .next(response):
@@ -93,25 +92,23 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
             .setDelegate(self)
             .addDisposableTo(self.disposeBag)
         
-        
         // item selected
         placeTableView.rx.itemSelected.subscribe { (indexPath) in
             self.selectedPlace = self.places?[indexPath.element!.row]
             self.performSegue(withIdentifier: "showDetails", sender: nil)
             }
             .addDisposableTo(self.disposeBag)
-        
-        self.setTableObservable()
     }
     
-    public func setTableObservable() {
-        self.rxPlaces = Observable.just([], scheduler: MainScheduler.instance)
-        
+    public func setupRx() {
         // observable table view 👍
         self.rxPlaces
+            .asObservable()
             .bindTo(self.placeTableView.rx.items(cellIdentifier: CustomCellIdentifier.placeIdentifier, cellType: PlaceTableCell.self)){ (row, element, cell) in
                 cell.nameLabel?.text = element.name
-                cell.iconImageView.sd_setImage(with: URL(string: element.iconURL!), placeholderImage: UIImage(named: "PlaceholderH"))
+                if let iconURL = element.iconURL {
+                    cell.iconImageView.sd_setImage(with: URL(string: iconURL), placeholderImage: UIImage(named: "PlaceholderH"))
+                }
                 cell.vicinityLabel.text = element.vicinity
                 if let rating = element.rating {
                     cell.ratingLabel.text = String(format: "%.1f", rating)
@@ -119,23 +116,26 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
             }
             .addDisposableTo(self.disposeBag)
 
+//        self.rxPlaces
+//            .asObservable()
+//            .subscribe { event in
+//                print("doidera: \(event)")
+//            }
+//            .addDisposableTo(self.disposeBag)
     }
     
     private func didSearch(type: Type) {
         self.loadPlaces("34.052235,-118.243683", type: type, radius: 5000)
-            .subscribeOn(MainScheduler.instance)
             .trackActivity(activityIndicator)
             .subscribe { event in
                 switch event {
                 case let .next(response):
                     
-                    self.places = response
-//                    print(self.places)
+                    self.places = response.places
+                    self.pagetoken = response.nextPageToken
                     
-                    self.rxPlaces = Observable.just(self.places)
-                    
-//                    self.pagetoken = response.nextPageToken
-//                    print("page token: \(self.pagetoken)")
+                    self.rxPlaces.value = self.places
+
                 case let .error(error):
                     print(error)
                 case .completed():
@@ -173,12 +173,10 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
         
     }
     
-    func loadPlaces(_ location: String, type: Type, radius: Int) -> Observable<[Place]> {
+    func loadPlaces(_ location: String, type: Type, radius: Int) -> Observable<Result> {
         return self.provider!
             .request(.getPlaces(location: location, type: type, radius: radius, key: GooglePlacesAPI.token))
-            .observeOn(MainScheduler.instance)
-            .subscribeOn(MainScheduler.instance)
-            .mapArray(type: Place.self, keyPath: "results")
+            .mapObject(type: Result.self)
     }
     
     func nextPage(_ pagetoken: String) -> Observable<Result> {
@@ -226,8 +224,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
         newPlace.name = "hidden place"
         newPlace.vicinity = "hidden street"
         self.places.append(newPlace)
-        
-        self.rxPlaces = Observable.just(self.places)
+        self.rxPlaces.value = self.places
     }
     
     override func didReceiveMemoryWarning() {
