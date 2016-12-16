@@ -24,4 +24,19 @@ class TypePickerView: UIView {
         Bundle.main.loadNibNamed(String(describing: type(of: self)), owner: self, options: nil)
         self.addSubview(self.view);
     }
+    
+    func showHide() {
+        if isHidden {
+            self.isHidden = false
+            UIView.animate(withDuration: 0.25, delay: 0.0, options: .curveEaseOut, animations: {
+                self.frame.origin.y -= self.bounds.size.height
+            }, completion: nil)
+        } else {
+            UIView.animate(withDuration: 0.25, delay: 0.0, options: .curveEaseIn, animations: {
+                self.frame.origin.y += self.bounds.size.height
+            }, completion: { (completed) in
+                self.isHidden = true
+            })
+        }
+    }
 }

@@ -22,10 +22,11 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     @IBOutlet weak var placeTableView: UITableView!
     @IBOutlet weak var progressBarView: ProgressBarView!
     @IBOutlet weak var typePickerView: TypePickerView!
+    @IBOutlet var tableHeaderView: UIView!
+    @IBOutlet weak var tableHeaderLabel: UILabel!
     
     //constraints
-    @IBOutlet weak var searchBarHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var pickerViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var searchBarTopConstraint: NSLayoutConstraint!
     
     //vars
     private var places:[Place]! = []
@@ -36,6 +37,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     private var disposeBag:DisposeBag! = DisposeBag()
     private var selectedPlace:Place!
     private var pickerDatasource:[String]! = []
+    private var selectedType:Type?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,14 +51,19 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     }
     
     func setupConstraints() {
+        
     }
     
     func setupSearchBar() {
+        
     }
 
     func setupPickerView() {
         self.typePickerView.pickerView.translatesAutoresizingMaskIntoConstraints = false
+        self.typePickerView.translatesAutoresizingMaskIntoConstraints = false
         self.typePickerView.pickerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.typePickerView.frame = CGRect.init(x: 20, y: 20, width: 100, height: 100)
+        self.typePickerView.pickerView.frame = CGRect.init(x: 20, y: 20, width: 100, height: 100)
         
         self.typePickerView.pickerView.dataSource = self
         self.typePickerView.pickerView.delegate = self
@@ -71,11 +78,10 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
             .subscribe { (event) in
                 switch event {
                 case let .next(response):
-                    self.didSearch(type: Type(rawValue: response.0)!)
-                case let .error(error):
-                    print(error)
-                case let .completed(completed):
-                    print(completed)
+                    self.selectedType = Type(rawValue: response.0)!
+                    self.didSearch(type: self.selectedType!)
+                default:
+                    break
                 }
             }
             .addDisposableTo(self.disposeBag)
@@ -130,14 +136,18 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
             .subscribe { event in
                 switch event {
                 case let .next(response):
-                    
                     self.places = response.places
                     self.pagetoken = response.nextPageToken
-                    
                     self.rxPlaces.value = self.places
-
-                case let .error(error):
-                    print(error)
+                    self.typePickerView.isHidden = true
+                    self.typePickerView.showHide()
+                case .error:
+                    let alertController = self.alertController(title: "Error", message: "You are offline", preferredStyle: .alert, actions: [UIAlertAction.init(title: "OK", style: UIAlertActionStyle.default, handler: nil)])
+                    if !(self.navigationController!.visibleViewController!.isKind(of: UIAlertController.self)) {
+                        DispatchQueue.main.async {
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                    }
                 case .completed():
                     self.progressBarView.isHidden = true
                 }
@@ -196,26 +206,37 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     
     @IBAction func showHideSearchBar(_ sender: Any) {
         self.searchBar.isHidden = !self.searchBar.isHidden
-        self.searchBarHeightConstraint.constant = self.searchBar.isHidden ? 0 : 44
+        self.searchBarTopConstraint.constant = self.searchBar.isHidden ? -44 : 0
     }
     
     @IBAction func chooseType(_ sender: Any) {
-        self.typePickerView.isHidden = !self.typePickerView.isHidden
-        self.pickerViewHeightConstraint.constant = self.typePickerView.isHidden ? 0 : 150
+        self.typePickerView.showHide()
+//        self.typePickerView.isHidden = !self.typePickerView.isHidden
+//        self.pickerViewBottomConstraint.constant = self.typePickerView.isHidden ? -150 : 0
     }
     
-    //Mark - UIPickerViewDelegate:
+    //MARK: UIPickerViewDelegate
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return pickerDatasource[row]
     }
     
-    //Mark - UIPickerViewDatasource:
+    //MARK: UIPickerViewDatasource
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return pickerDatasource.count
+    }
+    
+    //MARK: UITableViewDatasource
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        self.tableHeaderLabel.text = self.selectedType?.description
+        return self.tableHeaderView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 44
     }
     
     @IBAction func addPlace(_ sender: Any) {

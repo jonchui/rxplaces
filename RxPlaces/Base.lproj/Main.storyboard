@@ -21,6 +21,17 @@
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9Dm-bj-PeE">
+                                <rect key="frame" x="0.0" y="5" width="375" height="598"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                            <searchBar hidden="YES" contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="mDX-0w-A5J">
+                                <rect key="frame" x="0.0" y="-44" width="375" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="4Zr-9V-8Sr"/>
+                                </constraints>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1r4-Hg-gw8" customClass="ProgressBarView" customModule="RxPlaces" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="5"/>
                                 <color key="backgroundColor" red="0.25098040700000002" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -28,19 +39,8 @@
                                     <constraint firstAttribute="height" constant="5" id="Dfz-rK-leC"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9Dm-bj-PeE">
-                                <rect key="frame" x="0.0" y="49" width="375" height="404"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </tableView>
-                            <searchBar hidden="YES" contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="mDX-0w-A5J">
-                                <rect key="frame" x="0.0" y="5" width="375" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="4Zr-9V-8Sr"/>
-                                </constraints>
-                                <textInputTraits key="textInputTraits"/>
-                            </searchBar>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uuq-it-3iv" customClass="TypePickerView" customModule="RxPlaces" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="453" width="375" height="150"/>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uuq-it-3iv">
+                                <rect key="frame" x="0.0" y="603" width="375" height="150"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="150" id="EwI-Qx-Ke1"/>
@@ -50,15 +50,15 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Uuq-it-3iv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="64p-vx-tC2"/>
-                            <constraint firstItem="1r4-Hg-gw8" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="JZS-Us-8so"/>
+                            <constraint firstItem="1r4-Hg-gw8" firstAttribute="top" secondItem="mDX-0w-A5J" secondAttribute="bottom" id="6HF-FA-c5s"/>
                             <constraint firstAttribute="trailing" secondItem="Uuq-it-3iv" secondAttribute="trailing" id="QKi-oT-sNm"/>
-                            <constraint firstItem="mDX-0w-A5J" firstAttribute="top" secondItem="1r4-Hg-gw8" secondAttribute="bottom" id="UCV-pe-H8q"/>
+                            <constraint firstItem="mDX-0w-A5J" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="-44" id="UFb-LF-sI9"/>
                             <constraint firstItem="mDX-0w-A5J" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="a3m-eq-819"/>
                             <constraint firstAttribute="trailing" secondItem="1r4-Hg-gw8" secondAttribute="trailing" id="hjk-Yc-XXG"/>
                             <constraint firstAttribute="trailing" secondItem="9Dm-bj-PeE" secondAttribute="trailing" id="hqk-V3-RKc"/>
-                            <constraint firstItem="9Dm-bj-PeE" firstAttribute="top" secondItem="mDX-0w-A5J" secondAttribute="bottom" id="jWB-LO-Yed"/>
                             <constraint firstAttribute="trailing" secondItem="mDX-0w-A5J" secondAttribute="trailing" id="n4z-lh-nhH"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Uuq-it-3iv" secondAttribute="bottom" id="qPW-qI-Ph5"/>
+                            <constraint firstItem="9Dm-bj-PeE" firstAttribute="top" secondItem="1r4-Hg-gw8" secondAttribute="bottom" id="q4E-L4-90m"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Uuq-it-3iv" secondAttribute="bottom" constant="-150" id="qPW-qI-Ph5"/>
                             <constraint firstItem="9Dm-bj-PeE" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="s6c-ZB-dOa"/>
                             <constraint firstItem="Uuq-it-3iv" firstAttribute="top" secondItem="9Dm-bj-PeE" secondAttribute="bottom" id="xBE-WP-kaM"/>
                             <constraint firstItem="1r4-Hg-gw8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="xWx-gr-1nT"/>
@@ -88,16 +88,34 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
-                        <outlet property="pickerViewHeightConstraint" destination="EwI-Qx-Ke1" id="qZL-Lr-tcG"/>
                         <outlet property="placeTableView" destination="9Dm-bj-PeE" id="PHM-g6-riA"/>
                         <outlet property="progressBarView" destination="1r4-Hg-gw8" id="gKH-ma-fTM"/>
                         <outlet property="searchBar" destination="mDX-0w-A5J" id="vus-dM-Wic"/>
-                        <outlet property="searchBarHeightConstraint" destination="4Zr-9V-8Sr" id="lxC-uA-V35"/>
+                        <outlet property="searchBarTopConstraint" destination="UFb-LF-sI9" id="m4k-cY-4Gd"/>
+                        <outlet property="tableHeaderLabel" destination="8Pn-bv-0zg" id="mWI-aE-7m9"/>
+                        <outlet property="tableHeaderView" destination="GEg-oe-hap" id="GRl-oQ-vXh"/>
                         <outlet property="typePickerView" destination="Uuq-it-3iv" id="xyV-1m-9bS"/>
                         <segue destination="abN-cN-wSa" kind="show" identifier="showDetails" id="Urr-S8-uZk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="GEg-oe-hap">
+                    <rect key="frame" x="0.0" y="0.0" width="408" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Pn-bv-0zg">
+                            <rect key="frame" x="183" y="54" width="43" height="21.5"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                            <color key="textColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstItem="8Pn-bv-0zg" firstAttribute="centerX" secondItem="GEg-oe-hap" secondAttribute="centerX" id="Emz-Jd-jqA"/>
+                        <constraint firstItem="8Pn-bv-0zg" firstAttribute="centerY" secondItem="GEg-oe-hap" secondAttribute="centerY" id="TTb-Xb-VBg"/>
+                    </constraints>
+                </view>
             </objects>
             <point key="canvasLocation" x="1076" y="112.89355322338831"/>
         </scene>
