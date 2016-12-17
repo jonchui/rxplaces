@@ -24,6 +24,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     @IBOutlet weak var typePickerView: TypePickerView!
     @IBOutlet var tableHeaderView: UIView!
     @IBOutlet weak var tableHeaderLabel: UILabel!
+    @IBOutlet weak var typeBarButtonItem: UIBarButtonItem!
     
     //constraints
     @IBOutlet weak var searchBarTopConstraint: NSLayoutConstraint!
@@ -35,7 +36,6 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     private var pagetoken:String?
     private var provider:RxMoyaProvider<GooglePlaces>! = RxMoyaProvider<GooglePlaces>()
     private var disposeBag:DisposeBag! = DisposeBag()
-    private var selectedPlace:Place!
     private var pickerDatasource:[String]! = []
     private var selectedType:Type?
     
@@ -47,7 +47,23 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
         setupTableView()
         setupPickerView()
         setupConstraints()
+        setupBarButtonItem()
         setupRx()
+    }
+    
+    func setupBarButtonItem() {
+        self.typeBarButtonItem
+            .rx
+            .tap
+            .asDriver()
+            .drive(onNext: { [unowned self] in
+                print("bla")
+            }, onCompleted: { 
+                print("completed")
+            }, onDisposed: { 
+                print("disposed")
+            })
+            .addDisposableTo(self.disposeBag)
     }
     
     func setupConstraints() {
@@ -59,20 +75,18 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     }
 
     func setupPickerView() {
-        self.typePickerView.pickerView.translatesAutoresizingMaskIntoConstraints = false
         self.typePickerView.translatesAutoresizingMaskIntoConstraints = false
-        self.typePickerView.pickerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        self.typePickerView.frame = CGRect.init(x: 20, y: 20, width: 100, height: 100)
-        self.typePickerView.pickerView.frame = CGRect.init(x: 20, y: 20, width: 100, height: 100)
+        self.typePickerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.typePickerView.backgroundColor = UIColor.lightGray
         
-        self.typePickerView.pickerView.dataSource = self
-        self.typePickerView.pickerView.delegate = self
+        self.typePickerView.dataSource = self
+        self.typePickerView.delegate = self
         
         Type.iterateEnum(Type.self).forEach { (element) in
             pickerDatasource.append(element.description)
         }
         
-        typePickerView.pickerView
+        typePickerView
             .rx
             .itemSelected
             .subscribe { (event) in
@@ -99,10 +113,12 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
             .addDisposableTo(self.disposeBag)
         
         // item selected
-        placeTableView.rx.itemSelected.subscribe { (indexPath) in
-            self.selectedPlace = self.places?[indexPath.element!.row]
-            self.performSegue(withIdentifier: "showDetails", sender: nil)
-            }
+        placeTableView
+            .rx
+            .modelSelected(Place.self)
+            .subscribe(onNext: { (place) in
+                self.performSegue(withIdentifier: "showDetails", sender: place)
+            })
             .addDisposableTo(self.disposeBag)
     }
     
@@ -139,7 +155,6 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
                     self.places = response.places
                     self.pagetoken = response.nextPageToken
                     self.rxPlaces.value = self.places
-                    self.typePickerView.isHidden = true
                     self.typePickerView.showHide()
                 case .error:
                     let alertController = self.alertController(title: "Error", message: "You are offline", preferredStyle: .alert, actions: [UIAlertAction.init(title: "OK", style: UIAlertActionStyle.default, handler: nil)])
@@ -177,8 +192,9 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
         .addDisposableTo(self.disposeBag)
         
         activityIndicator
-            .asObservable()
-            .bindTo(progressBarView.rx.isNotHidden)
+            .asDriver()
+            .map { !$0 }
+            .drive(progressBarView.rx.isHidden)
             .addDisposableTo(self.disposeBag)
         
     }
@@ -199,7 +215,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "showDetails") {
             if let detailsViewController = segue.destination as? DetailsViewController {
-                detailsViewController.place = self.selectedPlace
+                detailsViewController.place = sender as? Place
             }
         }
     }

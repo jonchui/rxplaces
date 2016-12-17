@@ -39,7 +39,7 @@
                                     <constraint firstAttribute="height" constant="5" id="Dfz-rK-leC"/>
                                 </constraints>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uuq-it-3iv">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uuq-it-3iv" customClass="TypePickerView" customModule="RxPlaces" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="603" width="375" height="150"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -94,7 +94,8 @@
                         <outlet property="searchBarTopConstraint" destination="UFb-LF-sI9" id="m4k-cY-4Gd"/>
                         <outlet property="tableHeaderLabel" destination="8Pn-bv-0zg" id="mWI-aE-7m9"/>
                         <outlet property="tableHeaderView" destination="GEg-oe-hap" id="GRl-oQ-vXh"/>
-                        <outlet property="typePickerView" destination="Uuq-it-3iv" id="xyV-1m-9bS"/>
+                        <outlet property="typeBarButtonItem" destination="0Tk-FM-JTW" id="guh-fs-iqv"/>
+                        <outlet property="typePickerView" destination="Uuq-it-3iv" id="axN-db-sE6"/>
                         <segue destination="abN-cN-wSa" kind="show" identifier="showDetails" id="Urr-S8-uZk"/>
                     </connections>
                 </viewController>

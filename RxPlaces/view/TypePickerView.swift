@@ -10,21 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class TypePickerView: UIView {
-    //outlets
-    @IBOutlet var view: UIView!
-    @IBOutlet weak var pickerView: UIPickerView!
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        self.initialize()
-    }
-    
-    func initialize() {
-        Bundle.main.loadNibNamed(String(describing: type(of: self)), owner: self, options: nil)
-        self.addSubview(self.view);
-    }
-    
+class TypePickerView: UIPickerView {
     func showHide() {
         if isHidden {
             self.isHidden = false

@@ -31,7 +31,6 @@
 		C9A0DB2C1DEA0CDB0048371A /* PlaceTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9A0DB2B1DEA0CDB0048371A /* PlaceTableCell.xib */; };
 		C9A0DB2E1DEA0D9D0048371A /* PlaceTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0DB2D1DEA0D9D0048371A /* PlaceTableCell.swift */; };
 		C9AA539D1DFF18A300E78EDE /* TypePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA539C1DFF18A300E78EDE /* TypePickerView.swift */; };
-		C9AA539F1DFF18B100E78EDE /* TypePickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9AA539E1DFF18B100E78EDE /* TypePickerView.xib */; };
 		C9C5AD2C1DEDAB65008A8CC2 /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C5AD2B1DEDAB65008A8CC2 /* ProgressBarView.swift */; };
 		C9C5AD2E1DEDAC93008A8CC2 /* Reactive+ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C5AD2D1DEDAC93008A8CC2 /* Reactive+ProgressBarView.swift */; };
 		C9C5AD381DEDD825008A8CC2 /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C5AD371DEDD825008A8CC2 /* UIViewController+Alert.swift */; };
@@ -88,7 +87,6 @@
 		C9A0DB2B1DEA0CDB0048371A /* PlaceTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaceTableCell.xib; sourceTree = "<group>"; };
 		C9A0DB2D1DEA0D9D0048371A /* PlaceTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceTableCell.swift; sourceTree = "<group>"; };
 		C9AA539C1DFF18A300E78EDE /* TypePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypePickerView.swift; sourceTree = "<group>"; };
-		C9AA539E1DFF18B100E78EDE /* TypePickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TypePickerView.xib; sourceTree = "<group>"; };
 		C9C5AD2B1DEDAB65008A8CC2 /* ProgressBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
 		C9C5AD2D1DEDAC93008A8CC2 /* Reactive+ProgressBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Reactive+ProgressBarView.swift"; sourceTree = "<group>"; };
 		C9C5AD371DEDD825008A8CC2 /* UIViewController+Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
@@ -244,7 +242,6 @@
 				C9A0DB2D1DEA0D9D0048371A /* PlaceTableCell.swift */,
 				C9C5AD2B1DEDAB65008A8CC2 /* ProgressBarView.swift */,
 				C9AA539C1DFF18A300E78EDE /* TypePickerView.swift */,
-				C9AA539E1DFF18B100E78EDE /* TypePickerView.xib */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -396,7 +393,6 @@
 				C9A0DAF91DE9C2FC0048371A /* Assets.xcassets in Resources */,
 				C9A0DAF71DE9C2FC0048371A /* Main.storyboard in Resources */,
 				C9A0DB2C1DEA0CDB0048371A /* PlaceTableCell.xib in Resources */,
-				C9AA539F1DFF18B100E78EDE /* TypePickerView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
