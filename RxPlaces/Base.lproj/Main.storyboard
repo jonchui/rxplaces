@@ -25,8 +25,8 @@
                                 <rect key="frame" x="0.0" y="5" width="375" height="598"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
-                            <searchBar hidden="YES" contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="mDX-0w-A5J">
-                                <rect key="frame" x="0.0" y="-44" width="375" height="44"/>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="mDX-0w-A5J">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="4Zr-9V-8Sr"/>
                                 </constraints>
@@ -39,9 +39,9 @@
                                     <constraint firstAttribute="height" constant="5" id="Dfz-rK-leC"/>
                                 </constraints>
                             </view>
-                            <pickerView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rSz-M9-8jb">
-                                <rect key="frame" x="0.0" y="603" width="375" height="150"/>
-                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rSz-M9-8jb">
+                                <rect key="frame" x="0.0" y="453" width="375" height="150"/>
+                                <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="150" id="tOD-Yl-AjI"/>
                                 </constraints>
@@ -49,10 +49,10 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="rSz-M9-8jb" secondAttribute="bottom" constant="-150" id="AZd-yn-zHX"/>
+                            <constraint firstAttribute="bottom" secondItem="rSz-M9-8jb" secondAttribute="bottom" id="AZd-yn-zHX"/>
                             <constraint firstItem="rSz-M9-8jb" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="QUs-eH-H4E"/>
                             <constraint firstItem="1r4-Hg-gw8" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="Qub-Dh-Iqi"/>
-                            <constraint firstItem="mDX-0w-A5J" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="-44" id="UFb-LF-sI9"/>
+                            <constraint firstItem="mDX-0w-A5J" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="UFb-LF-sI9"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="9Dm-bj-PeE" secondAttribute="bottom" id="ZDp-2q-Bc0"/>
                             <constraint firstItem="mDX-0w-A5J" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="a3m-eq-819"/>
                             <constraint firstAttribute="trailing" secondItem="1r4-Hg-gw8" secondAttribute="trailing" id="hjk-Yc-XXG"/>
@@ -81,6 +81,7 @@
                         <outlet property="progressBarView" destination="1r4-Hg-gw8" id="gKH-ma-fTM"/>
                         <outlet property="searchBar" destination="mDX-0w-A5J" id="vus-dM-Wic"/>
                         <outlet property="searchBarButtonItem" destination="Xsb-dW-tA1" id="FWa-a9-ozz"/>
+                        <outlet property="sortBarButtonItem" destination="s9w-Nw-DeB" id="kmM-PL-Aph"/>
                         <outlet property="tableHeaderLabel" destination="8Pn-bv-0zg" id="mWI-aE-7m9"/>
                         <outlet property="tableHeaderView" destination="GEg-oe-hap" id="GRl-oQ-vXh"/>
                         <outlet property="typeBarButtonItem" destination="0Tk-FM-JTW" id="guh-fs-iqv"/>
@@ -94,7 +95,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Pn-bv-0zg">
-                            <rect key="frame" x="183" y="54" width="43" height="21.5"/>
+                            <rect key="frame" x="183" y="54" width="43" height="22"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                             <color key="textColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>

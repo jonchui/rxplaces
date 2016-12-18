@@ -27,6 +27,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     @IBOutlet weak var typeBarButtonItem: UIBarButtonItem!
     @IBOutlet weak var searchBarButtonItem: UIBarButtonItem!
     @IBOutlet weak var addBarButtonItem: UIBarButtonItem!
+    @IBOutlet weak var sortBarButtonItem: UIBarButtonItem!
     
     //vars
     private var places:[Place]! = []
@@ -54,8 +55,9 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
             .rx
             .tap
             .asDriver()
+            .debounce(0.25)
             .drive(onNext: { [unowned self] in
-                self.typePickerView.showHide(from: .footer)
+                self.typePickerView.showHide()
             })
             .addDisposableTo(self.disposeBag)
         
@@ -63,8 +65,9 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
         .rx
         .tap
         .asDriver()
+        .debounce(0.25)
         .drive(onNext: { [unowned self] in
-            self.searchBar.showHide(from: .header)
+            self.searchBar.showHide()
         })
         .addDisposableTo(self.disposeBag)
         
@@ -74,13 +77,23 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
         .asDriver()
         .drive(onNext: { [unowned self] in
             var newPlace = Place()
-            newPlace.id = "12312312321"
+            newPlace.id = String(arc4random()%100)
             newPlace.name = "hidden place"
             newPlace.vicinity = "hidden street"
+            newPlace.rating = Double(arc4random()%5)
             self.places.append(newPlace)
             self.rxPlaces.value = self.places
-            self.typePickerView.isHidden = true
-            self.searchBar.isHidden = true
+            })
+            .addDisposableTo(self.disposeBag)
+        
+        self.sortBarButtonItem
+            .rx
+            .tap
+            .asDriver()
+            .drive(onNext: { [unowned self] in
+                self.rxPlaces.value.sort(by: { (a, b) -> Bool in
+                    return floor(a.rating!) > floor(b.rating!)
+                })
             })
             .addDisposableTo(self.disposeBag)
     }
@@ -136,8 +149,8 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     public func setupRx() {
         // observable table view 👍
         self.rxPlaces
-            .asObservable()
-            .bindTo(self.placeTableView.rx.items(cellIdentifier: CustomCellIdentifier.placeIdentifier, cellType: PlaceTableCell.self)){ (row, element, cell) in
+            .asDriver()
+            .drive(self.placeTableView.rx.items(cellIdentifier: CustomCellIdentifier.placeIdentifier, cellType: PlaceTableCell.self)){ (row, element, cell) in
                 cell.nameLabel?.text = element.name
                 if let iconURL = element.iconURL {
                     cell.iconImageView.sd_setImage(with: URL(string: iconURL), placeholderImage: UIImage(named: "PlaceholderH"))
@@ -146,15 +159,10 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
                 if let rating = element.rating {
                     cell.ratingLabel.text = String(format: "%.1f", rating)
                 }
+//                self.typePickerView.showHide()
+//                self.searchBar.showHide()
             }
             .addDisposableTo(self.disposeBag)
-
-//        self.rxPlaces
-//            .asObservable()
-//            .subscribe { event in
-//                print("doidera: \(event)")
-//            }
-//            .addDisposableTo(self.disposeBag)
     }
     
     private func didSearch(type: Type) {
@@ -166,13 +174,13 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
                     self.places = response.places
                     self.pagetoken = response.nextPageToken
                     self.rxPlaces.value = self.places
-                    self.typePickerView.showHide(from: .footer)
+                    self.typePickerView.showHide()
                 case .error:
-                    let alertController = self.alertController(title: "Error", message: "You are offline", preferredStyle: .alert, actions: [UIAlertAction.init(title: "OK", style: UIAlertActionStyle.default, handler: nil)])
+                    let alertController = UIAlertController(title: "Error", message: "You are offline", preferredStyle: .alert)
+                    let action = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
+                    alertController.addAction(action)
                     if !(self.navigationController!.visibleViewController!.isKind(of: UIAlertController.self)) {
-                        DispatchQueue.main.async {
-                            self.present(alertController, animated: true, completion: nil)
-                        }
+                        self.navigationController?.present(alertController, animated: true, completion: nil)
                     }
                 case .completed():
                     self.progressBarView.isHidden = true
@@ -189,11 +197,11 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
             case let .next(status):
                 print("network is \(status)")
                 if !reachable._reachability.isReachable {
-                    let alertController = self.alertController(title: "Error", message: reachable._reachability.currentReachabilityStatus.description, preferredStyle: UIAlertControllerStyle.alert, actions: [UIAlertAction.init(title: "OK", style: UIAlertActionStyle.default, handler: nil)])
+                    let alertController = UIAlertController(title: "Error", message: reachable._reachability.currentReachabilityStatus.description, preferredStyle: UIAlertControllerStyle.alert)
+                    let action = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
+                    alertController.addAction(action)
                     if !(self.navigationController!.visibleViewController!.isKind(of: UIAlertController.self)) {
-                        DispatchQueue.main.async {
-                            self.present(alertController, animated: true, completion: nil)
-                        }
+                        self.navigationController?.present(alertController, animated: true, completion: nil)
                     }
                 }
             default:
@@ -252,7 +260,11 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 44
+        if (self.selectedType != nil) {
+            return 44
+        } else {
+            return 0
+        }
     }
     
     override func didReceiveMemoryWarning() {

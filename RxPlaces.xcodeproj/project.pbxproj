@@ -32,7 +32,6 @@
 		C9A0DB2C1DEA0CDB0048371A /* PlaceTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9A0DB2B1DEA0CDB0048371A /* PlaceTableCell.xib */; };
 		C9A0DB2E1DEA0D9D0048371A /* PlaceTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0DB2D1DEA0D9D0048371A /* PlaceTableCell.swift */; };
 		C9C5AD2C1DEDAB65008A8CC2 /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C5AD2B1DEDAB65008A8CC2 /* ProgressBarView.swift */; };
-		C9C5AD381DEDD825008A8CC2 /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C5AD371DEDD825008A8CC2 /* UIViewController+Alert.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,7 +86,6 @@
 		C9A0DB2B1DEA0CDB0048371A /* PlaceTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaceTableCell.xib; sourceTree = "<group>"; };
 		C9A0DB2D1DEA0D9D0048371A /* PlaceTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceTableCell.swift; sourceTree = "<group>"; };
 		C9C5AD2B1DEDAB65008A8CC2 /* ProgressBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
-		C9C5AD371DEDD825008A8CC2 /* UIViewController+Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		CE322B850E54AC2D75299AE4 /* Pods_DesafioYouseTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DesafioYouseTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1E4B376E0710C26D3CA908D /* Pods-RxPlacesUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxPlacesUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RxPlacesUITests/Pods-RxPlacesUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		F282323EDB99A6FB1FA83650 /* Pods_RxPlaces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RxPlaces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -246,7 +244,6 @@
 		C9C5AD281DEDA9C9008A8CC2 /* extension */ = {
 			isa = PBXGroup;
 			children = (
-				C9C5AD371DEDD825008A8CC2 /* UIViewController+Alert.swift */,
 				C97C732A1E061DFA00AF9D44 /* UIView+Animation.swift */,
 			);
 			path = extension;
@@ -555,7 +552,6 @@
 			files = (
 				C9A0DB221DE9C8900048371A /* ViewController.swift in Sources */,
 				C9A0DB241DE9C8B70048371A /* GooglePlaces.swift in Sources */,
-				C9C5AD381DEDD825008A8CC2 /* UIViewController+Alert.swift in Sources */,
 				C9A0DB281DE9C8F40048371A /* Place.swift in Sources */,
 				C944624F1DFEDC7500EEB0EF /* Type.swift in Sources */,
 				C93364301DECDBE300B03091 /* ActivityIndicator.swift in Sources */,
