@@ -1,11 +1,15 @@
 /* 
-  Localization.strings
+  Localizable.strings
   RxPlaces
 
   Created by Vitor Venturin Linhalis on 18/12/16.
   Copyright © 2016 Vitor Venturin Linhalis. All rights reserved.
 */
 "You are offline" = "Você está desconectado";
+"Cellular" = "Rede móvel";
+"WiFi" = "Wifi";
+"No Connection" = "Sem conexão";
 "Error" = "Erro";
-"accounting" = "Contador";
+
+"accounting" = "Contabilidade";
 "airport" = "Aeroporto";

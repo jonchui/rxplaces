@@ -77,10 +77,10 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
         .asDriver()
         .drive(onNext: { [unowned self] in
             var newPlace = Place()
-            newPlace.id = String(arc4random()%100)
+            newPlace.id = String(arc4random()%10000)
             newPlace.name = "hidden place"
             newPlace.vicinity = "hidden street"
-            newPlace.rating = Double(arc4random()%5)
+            newPlace.rating = Double(arc4random()%50)/10
             self.places.append(newPlace)
             self.rxPlaces.value = self.places
             })
@@ -159,8 +159,6 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
                 if let rating = element.rating {
                     cell.ratingLabel.text = String(format: "%.1f", rating)
                 }
-//                self.typePickerView.showHide()
-//                self.searchBar.showHide()
             }
             .addDisposableTo(self.disposeBag)
     }
@@ -197,7 +195,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
             case let .next(status):
                 print("network is \(status)")
                 if !reachable._reachability.isReachable {
-                    let alertController = UIAlertController(title: NSLocalizedString("Error", comment: "Error"), message: reachable._reachability.currentReachabilityStatus.description, preferredStyle: UIAlertControllerStyle.alert)
+                    let alertController = UIAlertController(title: NSLocalizedString("Error", comment: "Error"), message: NSLocalizedString(reachable._reachability.currentReachabilityStatus.description, comment: ""), preferredStyle: UIAlertControllerStyle.alert)
                     let action = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
                     alertController.addAction(action)
                     if !(self.navigationController!.visibleViewController!.isKind(of: UIAlertController.self)) {
@@ -255,15 +253,16 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     
     //MARK: UITableViewDatasource
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        self.tableHeaderLabel.text = self.selectedType?.description
+        let selectedRow = typePickerView.selectedRow(inComponent: 0)
+        self.tableHeaderLabel.text = pickerDatasource[selectedRow]
         return self.tableHeaderView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if (self.selectedType != nil) {
-            return 44
-        } else {
+        if typePickerView.selectedRow(inComponent: 0) == -1 {
             return 0
+        } else {
+            return 44
         }
     }
     
