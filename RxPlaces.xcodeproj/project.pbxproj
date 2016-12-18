@@ -16,6 +16,7 @@
 		C933642E1DECD4A200B03091 /* DefaultReachabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C933642D1DECD4A200B03091 /* DefaultReachabilityService.swift */; };
 		C93364301DECDBE300B03091 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C933642F1DECDBE300B03091 /* ActivityIndicator.swift */; };
 		C944624F1DFEDC7500EEB0EF /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = C944624E1DFEDC7500EEB0EF /* Type.swift */; };
+		C97C732B1E061DFA00AF9D44 /* UIView+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97C732A1E061DFA00AF9D44 /* UIView+Animation.swift */; };
 		C97D1F7A1DEB9E760025D5E3 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97D1F791DEB9E760025D5E3 /* Result.swift */; };
 		C9973AF51DEB891E0063D58D /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9973AF41DEB891E0063D58D /* DetailsViewController.swift */; };
 		C9A0DAF21DE9C2FC0048371A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0DAF11DE9C2FC0048371A /* AppDelegate.swift */; };
@@ -30,7 +31,6 @@
 		C9A0DB291DE9C8F40048371A /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0DB271DE9C8F40048371A /* Photo.swift */; };
 		C9A0DB2C1DEA0CDB0048371A /* PlaceTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9A0DB2B1DEA0CDB0048371A /* PlaceTableCell.xib */; };
 		C9A0DB2E1DEA0D9D0048371A /* PlaceTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0DB2D1DEA0D9D0048371A /* PlaceTableCell.swift */; };
-		C9AA539D1DFF18A300E78EDE /* TypePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AA539C1DFF18A300E78EDE /* TypePickerView.swift */; };
 		C9C5AD2C1DEDAB65008A8CC2 /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C5AD2B1DEDAB65008A8CC2 /* ProgressBarView.swift */; };
 		C9C5AD381DEDD825008A8CC2 /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C5AD371DEDD825008A8CC2 /* UIViewController+Alert.swift */; };
 /* End PBXBuildFile section */
@@ -65,6 +65,7 @@
 		C933642D1DECD4A200B03091 /* DefaultReachabilityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultReachabilityService.swift; sourceTree = "<group>"; };
 		C933642F1DECDBE300B03091 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		C944624E1DFEDC7500EEB0EF /* Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
+		C97C732A1E061DFA00AF9D44 /* UIView+Animation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Animation.swift"; sourceTree = "<group>"; };
 		C97D1F791DEB9E760025D5E3 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		C9973AF41DEB891E0063D58D /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		C9A0DAEE1DE9C2FC0048371A /* RxPlaces.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RxPlaces.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,7 +86,6 @@
 		C9A0DB271DE9C8F40048371A /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		C9A0DB2B1DEA0CDB0048371A /* PlaceTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaceTableCell.xib; sourceTree = "<group>"; };
 		C9A0DB2D1DEA0D9D0048371A /* PlaceTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceTableCell.swift; sourceTree = "<group>"; };
-		C9AA539C1DFF18A300E78EDE /* TypePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypePickerView.swift; sourceTree = "<group>"; };
 		C9C5AD2B1DEDAB65008A8CC2 /* ProgressBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
 		C9C5AD371DEDD825008A8CC2 /* UIViewController+Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		CE322B850E54AC2D75299AE4 /* Pods_DesafioYouseTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DesafioYouseTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -239,7 +239,6 @@
 				C9A0DB2B1DEA0CDB0048371A /* PlaceTableCell.xib */,
 				C9A0DB2D1DEA0D9D0048371A /* PlaceTableCell.swift */,
 				C9C5AD2B1DEDAB65008A8CC2 /* ProgressBarView.swift */,
-				C9AA539C1DFF18A300E78EDE /* TypePickerView.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -248,6 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				C9C5AD371DEDD825008A8CC2 /* UIViewController+Alert.swift */,
+				C97C732A1E061DFA00AF9D44 /* UIView+Animation.swift */,
 			);
 			path = extension;
 			sourceTree = "<group>";
@@ -342,8 +342,9 @@
 				TargetAttributes = {
 					C9A0DAED1DE9C2FC0048371A = {
 						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = XQN3A35EM8;
 						LastSwiftMigration = 0810;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					C9A0DB011DE9C2FC0048371A = {
 						CreatedOnToolsVersion = 8.1;
@@ -561,7 +562,7 @@
 				C97D1F7A1DEB9E760025D5E3 /* Result.swift in Sources */,
 				C9A0DAF21DE9C2FC0048371A /* AppDelegate.swift in Sources */,
 				C933642C1DECB1EF00B03091 /* ImageCacheSingleton.swift in Sources */,
-				C9AA539D1DFF18A300E78EDE /* TypePickerView.swift in Sources */,
+				C97C732B1E061DFA00AF9D44 /* UIView+Animation.swift in Sources */,
 				C933642E1DECD4A200B03091 /* DefaultReachabilityService.swift in Sources */,
 				C9973AF51DEB891E0063D58D /* DetailsViewController.swift in Sources */,
 				C9A0DB291DE9C8F40048371A /* Photo.swift in Sources */,
@@ -722,7 +723,8 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = XQN3A35EM8;
 				INFOPLIST_FILE = "$(SRCROOT)/RxPlaces/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -738,7 +740,8 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = XQN3A35EM8;
 				INFOPLIST_FILE = "$(SRCROOT)/RxPlaces/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
