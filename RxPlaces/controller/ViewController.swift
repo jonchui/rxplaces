@@ -37,7 +37,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     private var provider:RxMoyaProvider<GooglePlaces>! = RxMoyaProvider<GooglePlaces>()
     private var disposeBag:DisposeBag! = DisposeBag()
     private var pickerDatasource:[String]! = []
-    private var selectedType:Type?
+//    private var selectedType:Type?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,8 +116,9 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
             .subscribe { (event) in
                 switch event {
                 case let .next(response):
-                    self.selectedType = Type(rawValue: response.0)!
-                    self.didSearch(type: self.selectedType!)
+                    let selectedType = Type(rawValue: response.0)!
+                    self.tableHeaderLabel.text = NSLocalizedString(selectedType.description, comment: "")
+                    self.didSearch(type: selectedType)
                 default:
                     break
                 }
@@ -253,8 +254,6 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     
     //MARK: UITableViewDatasource
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let selectedRow = typePickerView.selectedRow(inComponent: 0)
-        self.tableHeaderLabel.text = pickerDatasource[selectedRow]
         return self.tableHeaderView
     }
     
