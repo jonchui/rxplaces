@@ -155,7 +155,7 @@ enum Type:Int, CustomStringConvertible {
             case .groceryOrSupermarket: return "grocery_or_supermarket"
             case .gym: return "gym"
             case .hairCare: return "hair_care"
-            case .hardwareStore: return "hardwcase_are_store"
+            case .hardwareStore: return "hardware_store"
             case .health: return "health"
             case .hinduTemple: return "hindu_temple"
             case .homeGoodsStore: return "home_goods_store"
