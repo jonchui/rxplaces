@@ -1,0 +1,27 @@
+
+/* Class = "UIBarButtonItem"; title = "Type"; ObjectID = "0Tk-FM-JTW"; */
+"0Tk-FM-JTW.title" = "Tipo";
+
+/* Class = "UIBarButtonItem"; title = "Add"; ObjectID = "0Vw-6T-k71"; */
+"0Vw-6T-k71.title" = "Mais";
+
+/* Class = "UINavigationItem"; title = "Place Details"; ObjectID = "1ad-j0-9MB"; */
+"1ad-j0-9MB.title" = "Detalhes";
+
+/* Class = "UILabel"; text = "Type"; ObjectID = "8Pn-bv-0zg"; */
+"8Pn-bv-0zg.text" = "Tipo";
+
+/* Class = "UINavigationItem"; title = "RxPlaces"; ObjectID = "F4s-o2-QDE"; */
+"F4s-o2-QDE.title" = "RxPlaces";
+
+/* Class = "UILabel"; text = "name"; ObjectID = "S5Z-p1-KcW"; */
+"S5Z-p1-KcW.text" = "nome";
+
+/* Class = "UIBarButtonItem"; title = "Search"; ObjectID = "Xsb-dW-tA1"; */
+"Xsb-dW-tA1.title" = "Buscar";
+
+/* Class = "UILabel"; text = "vicinity"; ObjectID = "ZiC-bo-RK8"; */
+"ZiC-bo-RK8.text" = "logradouro";
+
+/* Class = "UIBarButtonItem"; title = "Sort"; ObjectID = "s9w-Nw-DeB"; */
+"s9w-Nw-DeB.title" = "Ordenar";

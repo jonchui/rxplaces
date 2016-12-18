@@ -1,0 +1,11 @@
+/* 
+  Localization.strings
+  RxPlaces
+
+  Created by Vitor Venturin Linhalis on 18/12/16.
+  Copyright © 2016 Vitor Venturin Linhalis. All rights reserved.
+*/
+"You are offline" = "Você está desconectado";
+"Error" = "Erro";
+"accounting" = "Contador";
+"airport" = "Aeroporto";

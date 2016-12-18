@@ -130,7 +130,7 @@
             </objects>
             <point key="canvasLocation" x="-1" y="113"/>
         </scene>
-        <!--Place Details-->
+        <!--Details-->
         <scene sceneID="elb-Bl-ZyX">
             <objects>
                 <viewController id="abN-cN-wSa" customClass="DetailsViewController" customModule="RxPlaces" customModuleProvider="target" sceneMemberID="viewController">
@@ -189,7 +189,7 @@
                             <constraint firstItem="Q2p-BH-h9Y" firstAttribute="centerY" secondItem="7p2-XD-ZdB" secondAttribute="centerY" id="yqa-bq-e92"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Place Details" id="1ad-j0-9MB">
+                    <navigationItem key="navigationItem" title="Details" id="1ad-j0-9MB">
                         <barButtonItem key="rightBarButtonItem" style="plain" systemItem="action" id="Wey-Vg-yJr">
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>

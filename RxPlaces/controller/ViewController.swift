@@ -107,7 +107,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
         self.typePickerView.delegate = self
         
         Type.iterateEnum(Type.self).forEach { (element) in
-            pickerDatasource.append(element.description)
+            pickerDatasource.append(NSLocalizedString(element.description, comment: ""))
         }
         
         typePickerView
@@ -176,7 +176,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
                     self.rxPlaces.value = self.places
                     self.typePickerView.showHide()
                 case .error:
-                    let alertController = UIAlertController(title: "Error", message: "You are offline", preferredStyle: .alert)
+                    let alertController = UIAlertController(title: NSLocalizedString("Error", comment: "Error"), message: NSLocalizedString("You are offline", comment: "You are offline"), preferredStyle: .alert)
                     let action = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
                     alertController.addAction(action)
                     if !(self.navigationController!.visibleViewController!.isKind(of: UIAlertController.self)) {
@@ -197,7 +197,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
             case let .next(status):
                 print("network is \(status)")
                 if !reachable._reachability.isReachable {
-                    let alertController = UIAlertController(title: "Error", message: reachable._reachability.currentReachabilityStatus.description, preferredStyle: UIAlertControllerStyle.alert)
+                    let alertController = UIAlertController(title: NSLocalizedString("Error", comment: "Error"), message: reachable._reachability.currentReachabilityStatus.description, preferredStyle: UIAlertControllerStyle.alert)
                     let action = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
                     alertController.addAction(action)
                     if !(self.navigationController!.visibleViewController!.isKind(of: UIAlertController.self)) {
