@@ -11,12 +11,13 @@ import RxSwift
 import RxCocoa
 import Moya_ModelMapper
 import SDWebImage
+import CoreLocation
 
 struct CustomCellIdentifier {
     static let placeIdentifier = "PlaceTableCell"
 }
 
-class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, CLLocationManagerDelegate {
     //outlets
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var placeTableView: UITableView!
@@ -30,6 +31,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     @IBOutlet weak var sortBarButtonItem: UIBarButtonItem!
     
     //vars
+    private let locationManager = CLLocationManager()
     private var places:[Place]! = []
     private var rxPlaces:Variable<[Place]>! = Variable([])
     private let activityIndicator = ActivityIndicator()
@@ -37,17 +39,39 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     private var provider:RxMoyaProvider<GooglePlaces>! = RxMoyaProvider<GooglePlaces>()
     private var disposeBag:DisposeBag! = DisposeBag()
     private var pickerDatasource:[String]! = []
-//    private var selectedType:Type?
+    private var sortOrder:Bool = false
+//    private let losAngeles = "34.052235,-118.243683"
+//    private let treviso = "45.666889, 12.243044"
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupReachability()
+        setupGeolocation()
         setupSearchBar()
         setupTableView()
         setupPickerView()
         setupBarButtonItems()
         setupRx()
+    }
+    
+    func setupGeolocation() {
+        // Ask for Authorization from the User.
+        self.locationManager.requestAlwaysAuthorization()
+        
+        // For use in foreground
+        self.locationManager.requestWhenInUseAuthorization()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let locValue:CLLocationCoordinate2D = manager.location!.coordinate
+        print("locations = \(locValue.latitude) \(locValue.longitude)")
     }
     
     func setupBarButtonItems() {
@@ -91,15 +115,20 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
             .tap
             .asDriver()
             .drive(onNext: { [unowned self] in
+                self.sortOrder = !self.sortOrder
                 self.rxPlaces.value.sort(by: { (a, b) -> Bool in
-                    return floor(a.rating!) > floor(b.rating!)
+                    if (self.sortOrder) {
+                        return a.rating! > b.rating!
+                    } else {
+                        return a.rating! < b.rating!
+                    }
                 })
             })
             .addDisposableTo(self.disposeBag)
     }
     
     func setupSearchBar() {
-        
+        self.searchBar.isHidden = true
     }
 
     func setupPickerView() {
@@ -157,15 +186,17 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
                     cell.iconImageView.sd_setImage(with: URL(string: iconURL), placeholderImage: UIImage(named: "PlaceholderH"))
                 }
                 cell.vicinityLabel.text = element.vicinity
-                if let rating = element.rating {
-                    cell.ratingLabel.text = String(format: "%.1f", rating)
-                }
+                cell.ratingLabel.text = String(format: "%.1f", element.rating!)
             }
             .addDisposableTo(self.disposeBag)
     }
     
     private func didSearch(type: Type) {
-        self.loadPlaces("34.052235,-118.243683", type: type, radius: 5000)
+        let lat = self.locationManager.location?.coordinate.latitude
+        let long = self.locationManager.location?.coordinate.longitude
+        let stringLocation = "\(lat!), \(long!)"
+        print(stringLocation)
+        self.loadPlaces(stringLocation, type: type, radius: 5000)
             .trackActivity(activityIndicator)
             .subscribe { event in
                 switch event {

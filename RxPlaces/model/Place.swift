@@ -22,6 +22,9 @@ struct Place : Mappable {
         vicinity = map.optionalFrom("vicinity")
         iconURL = map.optionalFrom("icon")
         rating = map.optionalFrom("rating")
+        if rating == nil {
+            rating = 0.0
+        }
         photos = map.optionalFrom("photos")
     }
     
