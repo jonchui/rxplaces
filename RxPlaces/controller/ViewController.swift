@@ -17,7 +17,7 @@ struct CustomCellIdentifier {
     static let placeIdentifier = "PlaceTableCell"
 }
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController {
     //outlets
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var placeTableView: UITableView!
@@ -33,7 +33,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     //vars
     fileprivate var pickerDatasource:[String]! = []
     fileprivate var placeViewModel = PlaceViewModel()
-    private let locationManager = CLLocationManager()
+    fileprivate let locationManager = CLLocationManager()
     private let activityIndicator = ActivityIndicator()
     private var sortOrder:Bool = false
     
@@ -47,25 +47,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         setupPickerView()
         setupBarButtonItems()
         setupRx()
-    }
-    
-    func setupGeolocation() {
-        // Ask for Authorization from the User.
-        self.locationManager.requestAlwaysAuthorization()
-        
-        // For use in foreground
-        self.locationManager.requestWhenInUseAuthorization()
-        
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            locationManager.startUpdatingLocation()
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let locValue:CLLocationCoordinate2D = manager.location!.coordinate
-        print("locations = \(locValue.latitude) \(locValue.longitude)")
     }
     
     func setupBarButtonItems() {
@@ -285,5 +266,26 @@ extension ViewController : UIPickerViewDelegate {
     //MARK: UIPickerViewDelegate
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return pickerDatasource[row]
+    }
+}
+
+extension ViewController : CLLocationManagerDelegate {
+    func setupGeolocation() {
+        // Ask for Authorization from the User.
+        self.locationManager.requestAlwaysAuthorization()
+        
+        // For use in foreground
+        self.locationManager.requestWhenInUseAuthorization()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let locValue:CLLocationCoordinate2D = manager.location!.coordinate
+        print("locations = \(locValue.latitude) \(locValue.longitude)")
     }
 }
