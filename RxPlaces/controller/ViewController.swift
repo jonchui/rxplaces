@@ -17,7 +17,7 @@ struct CustomCellIdentifier {
     static let placeIdentifier = "PlaceTableCell"
 }
 
-class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, CLLocationManagerDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate {
     //outlets
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var placeTableView: UITableView!
@@ -31,17 +31,11 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
     @IBOutlet weak var sortBarButtonItem: UIBarButtonItem!
     
     //vars
+    fileprivate var pickerDatasource:[String]! = []
+    fileprivate var placeViewModel = PlaceViewModel()
     private let locationManager = CLLocationManager()
-    private var places:[Place]! = []
-    private var rxPlaces:Variable<[Place]>! = Variable([])
     private let activityIndicator = ActivityIndicator()
-    private var pagetoken:String?
-    private var provider:RxMoyaProvider<GooglePlaces>! = RxMoyaProvider<GooglePlaces>()
-    private var disposeBag:DisposeBag! = DisposeBag()
-    private var pickerDatasource:[String]! = []
     private var sortOrder:Bool = false
-//    private let losAngeles = "34.052235,-118.243683"
-//    private let treviso = "45.666889, 12.243044"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,7 +77,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
             .drive(onNext: { [unowned self] in
                 self.typePickerView.showHide()
             })
-            .addDisposableTo(self.disposeBag)
+            .addDisposableTo(placeViewModel.disposeBag)
         
         self.searchBarButtonItem
         .rx
@@ -93,7 +87,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
         .drive(onNext: { [unowned self] in
             self.searchBar.showHide()
         })
-        .addDisposableTo(self.disposeBag)
+        .addDisposableTo(placeViewModel.disposeBag)
         
         self.addBarButtonItem
         .rx
@@ -105,10 +99,10 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
             newPlace.name = "hidden place"
             newPlace.vicinity = "hidden street"
             newPlace.rating = Double(arc4random()%50)/10
-            self.places.append(newPlace)
-            self.rxPlaces.value = self.places
+            self.placeViewModel.places.append(newPlace)
+            self.placeViewModel.rxPlaces.value = self.placeViewModel.places
             })
-            .addDisposableTo(self.disposeBag)
+            .addDisposableTo(placeViewModel.disposeBag)
         
         self.sortBarButtonItem
             .rx
@@ -116,7 +110,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
             .asDriver()
             .drive(onNext: { [unowned self] in
                 self.sortOrder = !self.sortOrder
-                self.rxPlaces.value.sort(by: { (a, b) -> Bool in
+                self.placeViewModel.rxPlaces.value.sort(by: { (a, b) -> Bool in
                     if (self.sortOrder) {
                         return a.rating! > b.rating!
                     } else {
@@ -124,61 +118,16 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
                     }
                 })
             })
-            .addDisposableTo(self.disposeBag)
+            .addDisposableTo(placeViewModel.disposeBag)
     }
     
     func setupSearchBar() {
         self.searchBar.isHidden = true
     }
 
-    func setupPickerView() {
-        self.typePickerView.dataSource = self
-        self.typePickerView.delegate = self
-        
-        Type.iterateEnum(Type.self).forEach { (element) in
-            pickerDatasource.append(NSLocalizedString(element.description, comment: ""))
-        }
-        
-        typePickerView
-            .rx
-            .itemSelected
-            .subscribe { (event) in
-                switch event {
-                case let .next(response):
-                    let selectedType = Type(rawValue: response.0)!
-                    self.tableHeaderLabel.text = NSLocalizedString(selectedType.description, comment: "")
-                    self.didSearch(type: selectedType)
-                default:
-                    break
-                }
-            }
-            .addDisposableTo(self.disposeBag)
-    }
-    
-    func setupTableView() {
-        //setup custom cells
-        let nib = UINib(nibName: CustomCellIdentifier.placeIdentifier, bundle: nil)
-        placeTableView.register(nib, forCellReuseIdentifier: CustomCellIdentifier.placeIdentifier)
-        
-        // setup tableview delegate
-        placeTableView
-            .rx
-            .setDelegate(self)
-            .addDisposableTo(self.disposeBag)
-        
-        // item selected
-        placeTableView
-            .rx
-            .modelSelected(Place.self)
-            .subscribe(onNext: { (place) in
-                self.performSegue(withIdentifier: "showDetails", sender: place)
-            })
-            .addDisposableTo(self.disposeBag)
-    }
-    
     public func setupRx() {
         // observable table view 👍
-        self.rxPlaces
+        self.placeViewModel.rxPlaces
             .asDriver()
             .drive(self.placeTableView.rx.items(cellIdentifier: CustomCellIdentifier.placeIdentifier, cellType: PlaceTableCell.self)){ (row, element, cell) in
                 cell.nameLabel?.text = element.name
@@ -188,22 +137,22 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
                 cell.vicinityLabel.text = element.vicinity
                 cell.ratingLabel.text = String(format: "%.1f", element.rating!)
             }
-            .addDisposableTo(self.disposeBag)
+            .addDisposableTo(placeViewModel.disposeBag)
     }
     
-    private func didSearch(type: Type) {
+    fileprivate func didSearch(type: Type) {
         let lat = self.locationManager.location?.coordinate.latitude
         let long = self.locationManager.location?.coordinate.longitude
         let stringLocation = "\(lat!), \(long!)"
         print(stringLocation)
-        self.loadPlaces(stringLocation, type: type, radius: 5000)
+        self.placeViewModel.loadPlaces(stringLocation, type: type, radius: 5000)
             .trackActivity(activityIndicator)
             .subscribe { event in
                 switch event {
                 case let .next(response):
-                    self.places = response.places
-                    self.pagetoken = response.nextPageToken
-                    self.rxPlaces.value = self.places
+                    self.placeViewModel.places = response.places
+                    self.placeViewModel.pagetoken = response.nextPageToken
+                    self.placeViewModel.rxPlaces.value = self.placeViewModel.places
                     self.typePickerView.showHide()
                 case .error:
                     let alertController = UIAlertController(title: NSLocalizedString("Error", comment: "Error"), message: NSLocalizedString("You are offline", comment: "You are offline"), preferredStyle: .alert)
@@ -216,7 +165,7 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
                     self.progressBarView.isHidden = true
                 }
             }
-            .addDisposableTo(self.disposeBag)
+            .addDisposableTo(placeViewModel.disposeBag)
     }
     
     func setupReachability() {
@@ -238,27 +187,14 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
                 break
             }
         }
-        .addDisposableTo(self.disposeBag)
+        .addDisposableTo(placeViewModel.disposeBag)
         
         activityIndicator
             .asDriver()
             .map { !$0 }
             .drive(progressBarView.rx.isHidden)
-            .addDisposableTo(self.disposeBag)
+            .addDisposableTo(placeViewModel.disposeBag)
         
-    }
-    
-    func loadPlaces(_ location: String, type: Type, radius: Int) -> Observable<Result> {
-        return self.provider!
-            .request(.getPlaces(location: location, type: type, radius: radius, key: GooglePlacesAPI.token))
-            .mapObject(type: Result.self)
-    }
-    
-    func nextPage(_ pagetoken: String) -> Observable<Result> {
-        return self.provider!
-            .request(.getNextPage(nextPageToken: pagetoken, key: GooglePlacesAPI.token))
-            .mapObject(type: Result.self)
-            .observeOn(MainScheduler.instance)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -269,11 +205,35 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
         }
     }
     
-    //MARK: UIPickerViewDelegate
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerDatasource[row]
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
     }
-    
+}
+
+extension ViewController : UITableViewDelegate {
+    func setupTableView() {
+        //setup custom cells
+        let nib = UINib(nibName: CustomCellIdentifier.placeIdentifier, bundle: nil)
+        placeTableView.register(nib, forCellReuseIdentifier: CustomCellIdentifier.placeIdentifier)
+        
+        // setup tableview delegate
+        placeTableView
+            .rx
+            .setDelegate(self)
+            .addDisposableTo(placeViewModel.disposeBag)
+        
+        // item selected
+        placeTableView
+            .rx
+            .modelSelected(Place.self)
+            .subscribe(onNext: { (place) in
+                self.performSegue(withIdentifier: "showDetails", sender: place)
+            })
+            .addDisposableTo(placeViewModel.disposeBag)
+    }
+}
+
+extension ViewController : UIPickerViewDataSource {
     //MARK: UIPickerViewDatasource
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -295,8 +255,35 @@ class ViewController: UIViewController, UITableViewDelegate, UIPickerViewDataSou
             return 44
         }
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+}
+
+extension ViewController : UIPickerViewDelegate {
+    func setupPickerView() {
+        self.typePickerView.dataSource = self
+        self.typePickerView.delegate = self
+        
+        Type.iterateEnum(Type.self).forEach { (element) in
+            pickerDatasource.append(NSLocalizedString(element.description, comment: ""))
+        }
+        
+        typePickerView
+            .rx
+            .itemSelected
+            .subscribe { (event) in
+                switch event {
+                case let .next(response):
+                    let selectedType = Type(rawValue: response.0)!
+                    self.tableHeaderLabel.text = NSLocalizedString(selectedType.description, comment: "")
+                    self.didSearch(type: selectedType)
+                default:
+                    break
+                }
+            }
+            .addDisposableTo(placeViewModel.disposeBag)
+    }
+
+    //MARK: UIPickerViewDelegate
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerDatasource[row]
     }
 }
