@@ -104,6 +104,18 @@ class ViewController: UIViewController {
     
     func setupSearchBar() {
         self.searchBar.isHidden = true
+        searchBar
+            .rx.text
+            .orEmpty
+            .debounce(0.5, scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .subscribe(onNext: { [unowned self] query in
+                self.placeViewModel.rxPlaces.value = self.placeViewModel.places.filter { bla in
+                    let hasPrefix = bla.name.hasPrefix(query)
+                    return hasPrefix
+                }
+            })
+            .addDisposableTo(self.placeViewModel.disposeBag)
     }
 
     public func setupRx() {
@@ -121,7 +133,7 @@ class ViewController: UIViewController {
             .addDisposableTo(placeViewModel.disposeBag)
     }
     
-    fileprivate func didSearch(type: Type) {
+    fileprivate func fetchPlacesBy(type: Type) {
         let lat = self.locationManager.location?.coordinate.latitude
         let long = self.locationManager.location?.coordinate.longitude
         let stringLocation = "\(lat!), \(long!)"
@@ -203,12 +215,13 @@ extension ViewController : UITableViewDelegate {
             .setDelegate(self)
             .addDisposableTo(placeViewModel.disposeBag)
         
-        // item selected
+        // table item selection
         placeTableView
             .rx
             .modelSelected(Place.self)
             .subscribe(onNext: { (place) in
                 self.performSegue(withIdentifier: "showDetails", sender: place)
+                self.view.endEditing(true)
             })
             .addDisposableTo(placeViewModel.disposeBag)
     }
@@ -255,7 +268,7 @@ extension ViewController : UIPickerViewDelegate {
                 case let .next(response):
                     let selectedType = Type(rawValue: response.0)!
                     self.tableHeaderLabel.text = NSLocalizedString(selectedType.description, comment: "")
-                    self.didSearch(type: selectedType)
+                    self.fetchPlacesBy(type: selectedType)
                 default:
                     break
                 }
@@ -286,6 +299,6 @@ extension ViewController : CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let locValue:CLLocationCoordinate2D = manager.location!.coordinate
-        print("locations = \(locValue.latitude) \(locValue.longitude)")
+//        print("locations = \(locValue.latitude) \(locValue.longitude)")
     }
 }

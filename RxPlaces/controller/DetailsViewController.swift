@@ -81,7 +81,7 @@ class DetailsViewController: UIViewController {
     }
     
     @IBAction func share(_ sender: UIBarButtonItem) {
-        let shareItems:Array! = []
+        let shareItems:Array! = [self.placeImageView.image]
         let avc:UIActivityViewController = UIActivityViewController(activityItems: shareItems, applicationActivities:[])
         
         let excludeActivities:Array = [
