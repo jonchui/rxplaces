@@ -152,7 +152,9 @@ class ViewController: UIViewController {
                     let action = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
                     alertController.addAction(action)
                     if !(self.navigationController!.visibleViewController!.isKind(of: UIAlertController.self)) {
-                        self.navigationController?.present(alertController, animated: true, completion: nil)
+                        OperationQueue.main.addOperation {
+                            self.navigationController?.present(alertController, animated: true, completion: nil)
+                        }
                     }
                 case .completed():
                     self.progressBarView.isHidden = true
@@ -173,7 +175,9 @@ class ViewController: UIViewController {
                     let action = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
                     alertController.addAction(action)
                     if !(self.navigationController!.visibleViewController!.isKind(of: UIAlertController.self)) {
-                        self.navigationController?.present(alertController, animated: true, completion: nil)
+                        OperationQueue.main.addOperation {
+                            self.navigationController?.present(alertController, animated: true, completion: nil)
+                        }
                     }
                 }
             default:
