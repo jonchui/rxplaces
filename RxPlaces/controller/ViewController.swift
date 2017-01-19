@@ -110,8 +110,8 @@ class ViewController: UIViewController {
             .debounce(0.5, scheduler: MainScheduler.instance)
             .distinctUntilChanged()
             .subscribe(onNext: { [unowned self] query in
-                self.placeViewModel.rxPlaces.value = self.placeViewModel.places.filter { bla in
-                    let hasPrefix = bla.name.hasPrefix(query)
+                self.placeViewModel.rxPlaces.value = self.placeViewModel.places.filter { filteredPlace in
+                    let hasPrefix = filteredPlace.name.hasPrefix(query)
                     return hasPrefix
                 }
             })
