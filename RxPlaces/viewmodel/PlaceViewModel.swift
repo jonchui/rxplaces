@@ -9,9 +9,15 @@
 import UIKit
 import RxSwift
 import Moya
+import RealmSwift
 
 class PlaceViewModel: NSObject {
-    var places:[Place]! = []
+//    var places: Results<Place> {
+//        get {
+//            return try! Realm().objects(Place.self)
+//        }
+//    }
+    var places:[Place]!
     var rxPlaces:Variable<[Place]>! = Variable([])
     var pagetoken:String?
     var disposeBag:DisposeBag! = DisposeBag()
@@ -29,6 +35,13 @@ class PlaceViewModel: NSObject {
             .mapObject(type: Result.self)
             .observeOn(MainScheduler.instance)
     }
-    
+
+    func addNewPlace(_ place: Place) {
+        let realm = try! Realm()
+        try! realm.write {
+            realm.add(place)
+        }
+    }
+
     //    losAngeles = "34.052235,-118.243683" (latitude, longitude)
 }

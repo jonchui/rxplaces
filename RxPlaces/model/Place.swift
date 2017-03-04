@@ -36,17 +36,23 @@ class Place : Object, Mappable  {
         }
         super.init()
     }
+    
+    override static func primaryKey() -> String? {
+        return "id"
+    }
+
 
     required init() {
         super.init()
     }
     
     required init(value: Any, schema: RLMSchema) {
-        fatalError("init(value:schema:) has not been implemented")
+        super.init()
     }
     
     required init(realm: RLMRealm, schema: RLMObjectSchema) {
-        fatalError("init(realm:schema:) has not been implemented")
+        super.init()
     }
+
 
 }

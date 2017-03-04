@@ -81,8 +81,7 @@ class ViewController: UIViewController {
             newPlace.name = "hidden place"
             newPlace.vicinity = "hidden street"
             newPlace.rating = Double(arc4random()%50)/10
-            self.placeViewModel.places.append(newPlace)
-            self.placeViewModel.rxPlaces.value = self.placeViewModel.places
+            self.placeViewModel.addNewPlace(newPlace)
             })
             .addDisposableTo(placeViewModel.disposeBag)
         
@@ -152,7 +151,7 @@ class ViewController: UIViewController {
                     self.placeViewModel.places = Array(places)
                     }
                     self.placeViewModel.pagetoken = response.nextPageToken
-                    self.placeViewModel.rxPlaces.value = self.placeViewModel.places
+                    self.placeViewModel.rxPlaces.value = Array(self.placeViewModel.places)
                     self.typePickerView.showHide()
                 case .error:
                     let alertController = UIAlertController(title: NSLocalizedString("Error", comment: "Error"), message: NSLocalizedString("You are offline", comment: "You are offline"), preferredStyle: .alert)
