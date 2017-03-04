@@ -11,6 +11,7 @@ import RxSwift
 import Moya
 import RealmSwift
 
+
 class PlaceViewModel: NSObject {
 //    var places: Results<Place> {
 //        get {
@@ -18,7 +19,7 @@ class PlaceViewModel: NSObject {
 //        }
 //    }
     var places:[Place]!
-    var rxPlaces:Variable<[Place]>! = Variable([])
+    var rxPlaces:Variable<[Place]>? = Variable([])
     var pagetoken:String?
     var disposeBag:DisposeBag! = DisposeBag()
     var provider:RxMoyaProvider<GooglePlaces>! = RxMoyaProvider<GooglePlaces>()

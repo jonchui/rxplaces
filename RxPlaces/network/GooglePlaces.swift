@@ -14,6 +14,11 @@ struct GooglePlacesAPI {
 
 // MARK: - TargetType Protocol Implementation
 enum GooglePlaces : TargetType {
+    /// The method used for parameter encoding.
+    public var parameterEncoding : ParameterEncoding {
+     return JSONEncoding.default
+    }
+    
     case getPlaces(location: String, type: Type, radius: Int, key: String)
     case getPhoto(photo: Photo, key: String)
     case getNextPage(nextPageToken: String, key: String)

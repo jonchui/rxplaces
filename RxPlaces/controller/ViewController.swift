@@ -12,11 +12,20 @@ import RxCocoa
 import Moya_ModelMapper
 import SDWebImage
 import CoreLocation
+
 import RealmSwift
+import RxRealm
+
 
 struct CustomCellIdentifier {
     static let placeIdentifier = "PlaceTableCell"
 }
+
+    var places: Results<Place> {
+        get {
+            return try! Realm().objects(Place.self)
+        }
+    }
 
 class ViewController: UIViewController {
     //outlets
@@ -91,7 +100,7 @@ class ViewController: UIViewController {
             .asDriver()
             .drive(onNext: { [unowned self] in
                 self.sortOrder = !self.sortOrder
-                self.placeViewModel.rxPlaces.value.sort(by: { (a, b) -> Bool in
+                self.placeViewModel.rxPlaces?.value.sort(by: { (a, b) -> Bool in
                     if (self.sortOrder) {
                         return a.rating > b.rating
                     } else {
@@ -110,17 +119,22 @@ class ViewController: UIViewController {
             .debounce(0.5, scheduler: MainScheduler.instance)
             .distinctUntilChanged()
             .subscribe(onNext: { [unowned self] query in
-                self.placeViewModel.rxPlaces.value = self.placeViewModel.places.filter { filteredPlace in
+                if (self.placeViewModel != nil){
+                self.placeViewModel.rxPlaces?.value = self.placeViewModel.places.filter { filteredPlace in
+                    if let name = filteredPlace.name {
                     let hasPrefix = filteredPlace.name.hasPrefix(query)
                     return hasPrefix
+                    }
+                    return false
                 }
+            }
             })
             .addDisposableTo(self.placeViewModel.disposeBag)
     }
 
     public func setupRx() {
         // observable table view 👍
-        self.placeViewModel.rxPlaces
+        self.placeViewModel.rxPlaces?
             .asDriver()
             .drive(self.placeTableView.rx.items(cellIdentifier: CustomCellIdentifier.placeIdentifier, cellType: PlaceTableCell.self)){ (row, element, cell) in
                 cell.nameLabel?.text = element.name
@@ -138,6 +152,38 @@ class ViewController: UIViewController {
         let long = self.locationManager.location?.coordinate.longitude
         let stringLocation = "\(lat!), \(long!)"
         print(stringLocation)
+        
+        Observable.collection(from: places)
+            .map {results in "places: \(results.count)"}
+            .subscribe { event in
+                switch event {
+                case let .next(response):
+//                    if let places = response.places {
+//                        let realm = try! Realm()
+//                        try! realm.write {
+//                            realm.add(places)
+//                        }
+//                        self.placeViewModel.places = Array(places)
+//                    }
+//                    self.placeViewModel.pagetoken = response.nextPageToken
+                    print(response)
+                    self.placeViewModel.rxPlaces?.value = Array(self.placeViewModel.places)
+                    self.typePickerView.showHide()
+                case .error:
+                    let alertController = UIAlertController(title: NSLocalizedString("Error", comment: "Error"), message: NSLocalizedString("You are offline", comment: "You are offline"), preferredStyle: .alert)
+                    let action = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
+                    alertController.addAction(action)
+                    if !(self.navigationController!.visibleViewController!.isKind(of: UIAlertController.self)) {
+                        OperationQueue.main.addOperation {
+                            self.navigationController?.present(alertController, animated: true, completion: nil)
+                        }
+                    }
+                case .completed():
+                    self.progressBarView.isHidden = true
+                }
+            }
+            .addDisposableTo(self.placeViewModel.disposeBag)
+        
         self.placeViewModel.loadPlaces(stringLocation, type: type, radius: 5000)
             .trackActivity(activityIndicator)
             .subscribe { event in
@@ -151,7 +197,7 @@ class ViewController: UIViewController {
                     self.placeViewModel.places = Array(places)
                     }
                     self.placeViewModel.pagetoken = response.nextPageToken
-                    self.placeViewModel.rxPlaces.value = Array(self.placeViewModel.places)
+                    self.placeViewModel.rxPlaces?.value = Array(self.placeViewModel.places)
                     self.typePickerView.showHide()
                 case .error:
                     let alertController = UIAlertController(title: NSLocalizedString("Error", comment: "Error"), message: NSLocalizedString("You are offline", comment: "You are offline"), preferredStyle: .alert)
