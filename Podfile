@@ -11,6 +11,7 @@ target 'RxPlaces' do
   pod 'RxCocoa'
   pod 'ReachabilitySwift', '~> 3'
   pod 'SDWebImage'
+  pod 'RealmSwift'
 
   target 'RxPlacesTests' do
     inherit! :search_paths
