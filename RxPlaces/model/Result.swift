@@ -12,12 +12,17 @@ import Realm
 
 class Result : Object, Mappable {
     dynamic var nextPageToken: String?
-    dynamic var places: [Place]?
+    var places: List<Place>?
     dynamic var status: String!
     
     required init(map: Mapper) throws {
         nextPageToken = map.optionalFrom("next_page_token")
-        places = map.optionalFrom("results")
+        if let placesList : [Place] = map.optionalFrom("results") {
+            places = List<Place>()
+            for place in placesList {
+                places!.append(place)
+            }
+        }
         try status = map.from("status")
         super.init()
     }

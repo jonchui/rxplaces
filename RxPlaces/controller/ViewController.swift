@@ -12,6 +12,7 @@ import RxCocoa
 import Moya_ModelMapper
 import SDWebImage
 import CoreLocation
+import RealmSwift
 
 struct CustomCellIdentifier {
     static let placeIdentifier = "PlaceTableCell"
@@ -143,7 +144,13 @@ class ViewController: UIViewController {
             .subscribe { event in
                 switch event {
                 case let .next(response):
-                    self.placeViewModel.places = response.places
+                    if let places = response.places {
+                        let realm = try! Realm()
+                        try! realm.write {
+                            realm.add(places)
+                        }
+                    self.placeViewModel.places = Array(places)
+                    }
                     self.placeViewModel.pagetoken = response.nextPageToken
                     self.placeViewModel.rxPlaces.value = self.placeViewModel.places
                     self.typePickerView.showHide()
