@@ -8,15 +8,31 @@
 
 import Foundation
 import Mapper
+import RealmSwift
+import Realm
 
-struct Photo : Mappable {
-    var reference: String!
-    var w:Int!
-    var h:Int!
+class Photo : Object, Mappable {
+    dynamic var reference: String!
+    dynamic var w:Int = 0
+    dynamic var h:Int = 0
     
-    init(map: Mapper) throws {
+    required init(map: Mapper) throws {
         try reference = map.from("photo_reference")
         try w = map.from("width")
         try h = map.from("height")
+        super.init()
     }
+    
+    required init() {
+        super.init()
+    }
+    
+    required init(value: Any, schema: RLMSchema) {
+        fatalError("init(value:schema:) has not been implemented")
+    }
+    
+    required init(realm: RLMRealm, schema: RLMObjectSchema) {
+        fatalError("init(realm:schema:) has not been implemented")
+    }
+
 }

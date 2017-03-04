@@ -93,9 +93,9 @@ class ViewController: UIViewController {
                 self.sortOrder = !self.sortOrder
                 self.placeViewModel.rxPlaces.value.sort(by: { (a, b) -> Bool in
                     if (self.sortOrder) {
-                        return a.rating! > b.rating!
+                        return a.rating > b.rating
                     } else {
-                        return a.rating! < b.rating!
+                        return a.rating < b.rating
                     }
                 })
             })
@@ -128,7 +128,7 @@ class ViewController: UIViewController {
                     cell.iconImageView.sd_setImage(with: URL(string: iconURL), placeholderImage: UIImage(named: "PlaceholderH"))
                 }
                 cell.vicinityLabel.text = element.vicinity
-                cell.ratingLabel.text = String(format: "%.1f", element.rating!)
+                cell.ratingLabel.text = String(format: "%.1f", element.rating)
             }
             .addDisposableTo(placeViewModel.disposeBag)
     }
@@ -303,6 +303,6 @@ extension ViewController : CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let locValue:CLLocationCoordinate2D = manager.location!.coordinate
-//        print("locations = \(locValue.latitude) \(locValue.longitude)")
+        print("locations = \(locValue.latitude) \(locValue.longitude)")
     }
 }

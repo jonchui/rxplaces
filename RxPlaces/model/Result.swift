@@ -7,19 +7,32 @@
 
 import Foundation
 import Mapper
+import RealmSwift
+import Realm
 
-struct Result : Mappable {
-    var nextPageToken: String?
-    var places: [Place]?
-    var status: String!
+class Result : Object, Mappable {
+    dynamic var nextPageToken: String?
+    dynamic var places: [Place]?
+    dynamic var status: String!
     
-    init(map: Mapper) throws {
+    required init(map: Mapper) throws {
         nextPageToken = map.optionalFrom("next_page_token")
         places = map.optionalFrom("results")
         try status = map.from("status")
+        super.init()
     }
     
-    init() {
+    required init() {
+        super.init()
     }
+    
+    required init(value: Any, schema: RLMSchema) {
+        fatalError("init(value:schema:) has not been implemented")
+    }
+    
+    required init(realm: RLMRealm, schema: RLMObjectSchema) {
+        fatalError("init(realm:schema:) has not been implemented")
+    }
+
     
 }

@@ -7,28 +7,46 @@
 
 import Foundation
 import Mapper
+import RealmSwift
+import Realm
 
-struct Place : Mappable {
-    var id: String!
-    var name: String!
-    var vicinity: String?
-    var iconURL: String?
-    var rating: Double?
-    var photos: [Photo]?
+class Place : Object, Mappable  {
+    dynamic var id: String!
+    dynamic var name: String!
+    dynamic var vicinity: String?
+    dynamic var iconURL: String?
+    dynamic var rating: Double = -1
+    var photos: List<Photo>?
     
-    init(map: Mapper) throws {
+    required init(map: Mapper) throws {
         try id = map.from("id")
         try name = map.from("name")
         vicinity = map.optionalFrom("vicinity")
         iconURL = map.optionalFrom("icon")
-        rating = map.optionalFrom("rating")
-        if rating == nil {
+        if let optionalRating : Double = map.optionalFrom("rating") {
+            rating = optionalRating
+        } else {
             rating = 0.0
         }
-        photos = map.optionalFrom("photos")
+        if let photosList : [Photo] = map.optionalFrom("photos") {
+            photos = List<Photo>()
+            for photo in photosList {
+                photos!.append(photo)
+            }
+        }
+        super.init()
+    }
+
+    required init() {
+        super.init()
     }
     
-    init() {
-        
+    required init(value: Any, schema: RLMSchema) {
+        fatalError("init(value:schema:) has not been implemented")
     }
+    
+    required init(realm: RLMRealm, schema: RLMObjectSchema) {
+        fatalError("init(realm:schema:) has not been implemented")
+    }
+
 }
